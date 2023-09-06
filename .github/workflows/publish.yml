@@ -9,7 +9,7 @@ on:
 jobs:
   helm:
     name: Publish Helm Chart
-    runs-on: ubuntu-22
+    runs-on: ubuntu-22.04
     steps:
       - name: Check out codebase
         uses: actions/checkout@v4
