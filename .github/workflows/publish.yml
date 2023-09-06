@@ -47,8 +47,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ github.event.release.upload_url }}
-          asset_path: .cr-release-packages/${{ env.CHART_NAME }}.tgz
-          asset_name: ${{ env.CHART_NAME }}.tgz
+          asset_path: .cr-release-packages/${{ github.event.release.tag_name }}.tgz
+          asset_name: ${{ github.event.release.tag_name }}.tgz
           asset_content_type: application/tar+gzip
 
       - name: Update index.yaml

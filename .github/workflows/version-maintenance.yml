@@ -1,0 +1,58 @@
+---
+name: Update Chart versions according to PR labels
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  version-maintenance:
+    name: Update ${{ matrix.chart }} version according to PR labels
+    runs-on: ubuntu-22
+    strategy:
+      matrix:
+        chart:
+          - metallb-dyn6
+    steps:
+      - name: Check out codebase
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: release-drafter/release-drafter@v5
+        id: drafter
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          config-name: release-drafter/${{ matrix.chart }}.yml
+
+      - name: Extract version from release name
+        run: echo "RESOLVED_VERSION=$(echo ${{ steps.drafter.outputs.name }} | sed 's/${{ matrix.chart }}-//')" >> $GITHUB_ENV
+
+      - name: Set up Python 3
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3"
+
+      - name: Update chart version
+        working-directory: charts/metallb-dyn6
+        run: |
+          make version=${{ env.RESOLVED_VERSION }} set-chart-version
+
+      - name: Open PR for collection version update
+        uses: peter-evans/create-pull-request@v5
+        with:
+          add-paths: |
+            charts/${{ matrix.chart }}/Chart.yaml
+          title: "${{ matrix.chart }}: Update chart version to ${{ env.RESOLVED_VERSION }}"
+          body: |
+            One or more changes have been merged into the ${{ matrix.chart }} since its last release.
+
+            This PR updates the charts version number in accordance with the PR labels.
+
+            Merge this PR before publishing a new Release of the chart.
+          commit-message: "${{ matrix.chart }}: Update chart version to ${{ env.RESOLVED_VERSION }}"
+          branch: maintenance/version-bump-${{ matrix.chart }}
+          delete-branch: true

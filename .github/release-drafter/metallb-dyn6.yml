@@ -43,6 +43,17 @@ version-resolver:
   default: patch
 
 template: |
+  ⚠️ **Release Checklist** ⚠️
+
+  Do **NOT** publish this release until you've completed these steps:
+
+  1. Merge any outstanding version update PRs for this chart
+  2. Verify that the chart version in Chart.yaml corresponds to this releases version
+  3. Ensure that the release notes are correct
+  4. Delete this section
+
+  ---
+
   # Changes
 
   $CHANGES
