@@ -1,0 +1,55 @@
+---
+name: CI
+on:
+  release:
+    types:
+      - published
+      - created
+
+jobs:
+  helm:
+    name: Publish Helm Chart
+    runs-on: ubuntu-22
+    steps:
+      - name: Check out codebase
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Configure Git
+        run: |
+          git config user.name "$GITHUB_ACTOR"
+          git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
+
+      - name: Install helm
+        uses: azure/setup-helm@v3
+        with:
+          token: "${{ secrets.GITHUB_TOKEN }}"
+
+      - name: Package Helm Chart
+        run: |
+          # Install chart-releaser
+          curl -sSLo cr.tar.gz "https://github.com/helm/chart-releaser/releases/download/v1.6.0/chart-releaser_1.6.0_linux_amd64.tar.gz"
+          tar -xzf cr.tar.gz
+          rm -f cr.tar.gz
+
+          # Extract chart name from release name
+          # The Regex is the official semver regex. Yes its long.
+          python -c "import re; import sys; print(re.sub(r'-(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$', '', sys.argv[1]))" "${{ github.event.release.tag_name }}" > chart-name
+          echo "CHART_NAME=$(cat chart-name)" >> $GITHUB_ENV
+
+          ./cr package --config .github/chart-releaser.yaml charts/${{ env.CHART_NAME }}
+
+      - name: Upload Helm Chart Release Asset
+        id: upload-release-asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: .cr-release-packages/${{ env.CHART_NAME }}.tgz
+          asset_name: ${{ env.CHART_NAME }}.tgz
+          asset_content_type: application/tar+gzip
+
+      - name: Update index.yaml
+        run: ./cr index --config .github/chart-releaser.yml --index-path . --token ${{ secrets.GITHUB_TOKEN }} --push

@@ -1,0 +1,49 @@
+---
+name: Update charts appVersion through PR
+
+on:
+  # Other repositories in the org can trigger this workflow when their applications have released a new version.
+  # The client payload is expected to contain the following:
+  # chart: name of the chart, string
+  # appVersion: newly released version of the App, in semver format
+  repository_dispatch:
+    types:
+      - app_release
+
+jobs:
+  update-app-version:
+    name: Update chart ${{ github.event.client_payload.chart }}s appVersion to ${{ github.event.client_payload.appVersion }}
+    runs-on: ubuntu-22
+    steps:
+      - name: Check out codebase
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python 3
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3"
+
+      - name: Update chart appVersion
+        working-directory: charts/${{ github.event.client_payload.chart }}
+        run: |
+          echo "BUMP_SIZE=$(make -s get-version-bump-size version=${{ github.event.client_payload.appVersion }})" >> $GITHUB_ENV
+          make set-app-version version=${{ github.event.client_payload.appVersion }}
+
+      - name: Open PR to merge appVersion
+        uses: peter-evans/create-pull-request@v5
+        with:
+          base: main
+          add-paths: |
+            charts/${{ github.event.client_payload.chart }}/Chart.yaml
+          title: "${{ github.event.client_payload.chart }}: bump AppVersion to ${{ github.event.client_payload.appVersion }}"
+          body: |
+            The upstream application for the ${{ github.event.client_payload.chart }} chart has been updated to version ${{ github.event.client_payload.appVersion }}.
+
+            This PR updates the charts appVersion accordingly.
+
+          commit-message: "${{ github.event.client_payload.chart }}: bump AppVersion to ${{ github.event.client_payload.appVersion }}"
+          branch: maintenance/${{ github.event.client_payload.chart }}-appVersion-bump
+          labels: pr-${{ env.BUMP_SIZE }}
+          delete-branch: true

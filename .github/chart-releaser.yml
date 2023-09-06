@@ -1,0 +1,3 @@
+owner: spacebird-dev
+release-name-template: "{{ .Name }}-{{ .Version }}"
+git-repo: charts
