@@ -38,7 +38,7 @@ jobs:
           python -c "import re; import sys; print(re.sub(r'-(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$', '', sys.argv[1]))" "${{ github.event.release.tag_name }}" > chart-name
           echo "CHART_NAME=$(cat chart-name)" >> $GITHUB_ENV
 
-          ./cr package --config .github/chart-releaser.yaml charts/${{ env.CHART_NAME }}
+          ./cr package --config .github/chart-releaser.yml charts/${{ env.CHART_NAME }}
 
       - name: Upload Helm Chart Release Asset
         id: upload-release-asset
