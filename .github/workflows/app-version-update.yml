@@ -2,23 +2,35 @@
 name: Update charts appVersion through PR
 
 on:
-  # Other repositories in the org can trigger this workflow when their applications have released a new version.
-  # The client payload is expected to contain the following:
-  # chart: name of the chart, string
-  # appVersion: newly released version of the App, in semver format
-  repository_dispatch:
-    types:
-      - app_release
+  workflow_dispatch:
+  schedule:
+    - cron: "0 3 * * *"
 
 jobs:
   update-app-version:
-    name: Update chart ${{ github.event.client_payload.chart }}s appVersion to ${{ github.event.client_payload.appVersion }}
+    name: Check for appVersion update (${{ matrix.chart }})
     runs-on: ubuntu-22
+    strategy:
+      fail-fast: false
+      matrix:
+        chart:
+          - name: metallb-dyn6
+            repository: spacebird-dev/metallb-dyn6
+            trim_prefix: ""
     steps:
       - name: Check out codebase
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+
+      - name: Get latest release
+        id: repo_release
+        uses: pozetroninc/github-action-get-latest-release@v0.7.0
+        with:
+          repository: ${{ matrix.chart.repository }}
+          excludes: prerelease, draft
+      - name: Extract version from release name
+        run: echo "RESOLVED_VERSION=$(echo ${{ steps.repo_release.outputs.release }} | sed 's/${{ matrix.chart.trim_prefix }}//')" >> $GITHUB_ENV
 
       - name: Set up Python 3
         uses: actions/setup-python@v4
@@ -26,24 +38,23 @@ jobs:
           python-version: "3"
 
       - name: Update chart appVersion
-        working-directory: charts/${{ github.event.client_payload.chart }}
+        working-directory: charts/${{ matrix.chart.name }}
         run: |
-          echo "BUMP_SIZE=$(make -s get-version-bump-size version=${{ github.event.client_payload.appVersion }})" >> $GITHUB_ENV
-          make set-app-version version=${{ github.event.client_payload.appVersion }}
+          echo "BUMP_SIZE=$(make -s get-version-bump-size version=${{ env.RESOLVED_VERSION }})" >> $GITHUB_ENV
+          make set-app-version version=${{ env.RESOLVED_VERSION }}
 
       - name: Open PR to merge appVersion
         uses: peter-evans/create-pull-request@v5
         with:
           base: main
           add-paths: |
-            charts/${{ github.event.client_payload.chart }}/Chart.yaml
-          title: "${{ github.event.client_payload.chart }}: bump AppVersion to ${{ github.event.client_payload.appVersion }}"
+            charts/${{ matrix.chart.name }}/Chart.yaml
+          title: "${{ matrix.chart.name }}: bump AppVersion to ${{ env.RESOLVED_VERSION }}"
           body: |
-            The upstream application for the ${{ github.event.client_payload.chart }} chart has been updated to version ${{ github.event.client_payload.appVersion }}.
+            The upstream application for the ${{ matrix.chart.name }} chart has been updated to version ${{ env.RESOLVED_VERSION }}.
 
             This PR updates the charts appVersion accordingly.
-
-          commit-message: "${{ github.event.client_payload.chart }}: bump AppVersion to ${{ github.event.client_payload.appVersion }}"
-          branch: maintenance/${{ github.event.client_payload.chart }}-appVersion-bump
+          commit-message: "${{ matrix.chart.name }}: bump AppVersion to ${{ env.RESOLVED_VERSION }}"
+          branch: maintenance/${{ matrix.chart.name }}-appVersion-bump
           labels: pr-${{ env.BUMP_SIZE }}
           delete-branch: true
