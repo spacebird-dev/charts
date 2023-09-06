@@ -13,7 +13,7 @@ dyn6:
   source: my-ip # Source of the dynamic IPv6 network that will be injected into MetalLB. Can only be `my-ip` at this point.
   subnetOverride:
     enabled: false # Whether to enable the subnet override. Both override and prefix_length must be set if this is true.
-    override: "0:0:0:00aa" # Override a portion of the prefix (usually the subnet). This value must be a valid IPv6 address. For example, to set the subnet to :beef: with a /48 dynamic prefix, use: 0:0:0:beef::
+    override: "0:0:0:00aa::" # Override a portion of the prefix (usually the subnet). This value must be a valid IPv6 address. For example, to set the subnet to :beef: with a /48 dynamic prefix, use: 0:0:0:beef::
     prefixLength: 56 # Length of the original network prefix that should be preserved when overriding the subnet with --subnet-override. For example, if you have a /48 prefix and are overriding the subnet with :beef:, set this to 48.
   updateInterval: 60 # Time between attempts to refresh the dynamic Prefix and updating the IPAddressPool in seconds
 
