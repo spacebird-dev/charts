@@ -55,4 +55,5 @@ jobs:
             Merge this PR before publishing a new Release of the chart.
           commit-message: "${{ matrix.chart }}: Update chart version to ${{ env.RESOLVED_VERSION }}"
           branch: maintenance/version-bump-${{ matrix.chart }}
+          labels: chore
           delete-branch: true
