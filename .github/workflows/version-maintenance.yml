@@ -15,6 +15,7 @@ jobs:
       matrix:
         chart:
           - metallb-dyn6
+          - clouddns-nat-helper
     steps:
       - name: Check out codebase
         uses: actions/checkout@v4

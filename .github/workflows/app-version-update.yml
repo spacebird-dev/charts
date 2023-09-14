@@ -17,6 +17,9 @@ jobs:
           - name: metallb-dyn6
             repository: spacebird-dev/metallb-dyn6
             trim_prefix: "v"
+          - name: clouddns-nat-helper
+            repository: spacebird-dev/clouddns-nat-helper
+            trim_prefix: "v"
     steps:
       - name: Check out codebase
         uses: actions/checkout@v4
