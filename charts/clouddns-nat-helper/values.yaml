@@ -21,7 +21,7 @@ ttl: 0 # Optionally set a TTL for newly created records. Will use the provider d
 replicaCount: 1
 
 image:
-  repository: quay.io/maxhoesel/clouddns-nat-helper # Full container repository path
+  repository: quay.io/spacebird-dev/clouddns-nat-helper # Full container repository path
   pullPolicy: IfNotPresent # Optionally set the pull policy
   tag: "" # Optionally specify a custom tag. Defaults to the Chart appVersion
 
