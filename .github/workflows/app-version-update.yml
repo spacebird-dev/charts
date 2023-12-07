@@ -36,7 +36,7 @@ jobs:
         run: echo "RESOLVED_VERSION=$(echo ${{ steps.repo_release.outputs.release }} | sed 's/${{ matrix.chart.trim_prefix }}//')" >> $GITHUB_ENV
 
       - name: Set up Python 3
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: "3"
 
