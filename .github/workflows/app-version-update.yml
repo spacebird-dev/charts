@@ -47,7 +47,7 @@ jobs:
           make set-app-version version=${{ env.RESOLVED_VERSION }}
 
       - name: Open PR to merge appVersion
-        uses: peter-evans/create-pull-request@v5
+        uses: peter-evans/create-pull-request@v6
         with:
           base: main
           add-paths: |
