@@ -28,7 +28,7 @@ jobs:
 
       - name: Get latest release
         id: repo_release
-        uses: pozetroninc/github-action-get-latest-release@v0.7.0
+        uses: pozetroninc/github-action-get-latest-release@v0.8.0
         with:
           repository: ${{ matrix.chart.repository }}
           excludes: prerelease, draft
