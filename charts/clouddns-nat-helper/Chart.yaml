@@ -3,4 +3,4 @@ appVersion: 0.2.12
 description: Autogenerate A records for NAT setups from AAAA records in cloud providers
 name: clouddns-nat-helper
 type: application
-version: 0.2.12
+version: 0.2.13
