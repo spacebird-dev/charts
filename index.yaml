@@ -2,6 +2,17 @@ apiVersion: v1
 entries:
   clouddns-nat-helper:
   - apiVersion: v2
+    appVersion: 0.2.13
+    created: "2024-06-09T23:15:37.828759864Z"
+    description: Autogenerate A records for NAT setups from AAAA records in cloud
+      providers
+    digest: ba25039e0d896b99f0ee55471035c742714324c7a333efeb65317b410979df36
+    name: clouddns-nat-helper
+    type: application
+    urls:
+    - https://github.com/spacebird-dev/charts/releases/download/clouddns-nat-helper-0.2.14/clouddns-nat-helper-0.2.14.tgz
+    version: 0.2.14
+  - apiVersion: v2
     appVersion: 0.2.12
     created: "2024-05-07T13:36:41.420622026Z"
     description: Autogenerate A records for NAT setups from AAAA records in cloud
@@ -55,4 +66,4 @@ entries:
     urls:
     - https://github.com/spacebird-dev/charts/releases/download/metallb-dyn6-0.1.0/metallb-dyn6-0.1.0.tgz
     version: 0.1.0
-generated: "2024-05-07T13:36:41.420640491Z"
+generated: "2024-06-09T23:15:37.82877909Z"
