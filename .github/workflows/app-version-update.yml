@@ -15,52 +15,42 @@ jobs:
       matrix:
         chart:
           - name: metallb-dyn6
-            repository: spacebird-dev/metallb-dyn6
-            trim_prefix: "v"
+            tag_prefix: "v"
           - name: clouddns-nat-helper
-            repository: spacebird-dev/clouddns-nat-helper
-            trim_prefix: "v"
+            tag_prefix: "v"
           - name: paperless
-            repository: paperless-ngx/paperless-ngx
-            trim_prefix: "Paperless-ngx v"
+            tag_prefix: "v"
     steps:
       - name: Check out codebase
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Get latest release
-        id: repo_release
-        uses: pozetroninc/github-action-get-latest-release@v0.8.0
-        with:
-          repository: ${{ matrix.chart.repository }}
-          excludes: prerelease, draft
-      - name: Extract version from release name
-        run: echo "RESOLVED_VERSION=$(echo ${{ steps.repo_release.outputs.release }} | sed 's/${{ matrix.chart.trim_prefix }}//')" >> $GITHUB_ENV
-
       - name: Set up Python 3
         uses: actions/setup-python@v5
         with:
-          python-version: "3"
+          python-version: "3.11"
 
-      - name: Update chart appVersion
-        working-directory: charts/${{ matrix.chart.name }}
-        run: |
-          echo "BUMP_SIZE=$(make -s get-version-bump-size version=${{ env.RESOLVED_VERSION }})" >> $GITHUB_ENV
-          make set-app-version version=${{ env.RESOLVED_VERSION }}
+      - name: Install pip dependencies
+        run: util/setup.sh
 
-      - name: Open PR to merge appVersion
+      - name: Update appVersion according to release difference
+        run: echo "BUMP_SIZE=$(source ./venv/bin/activate && util/bump-chart-version.py appVersion ${{ matrix.chart.name }} --tag-prefix ${{ matrix.chart.tag_prefix }})" >> $GITHUB_ENV
+
+      # 2-step process - we update the appVersion first, then open a PR with the bump size as a label
+      # release-drafter can then work out the appropiate chart version from all relevant PRs
+      - name: Open PR to merge potential appVersion change
         uses: peter-evans/create-pull-request@v6
         with:
           base: main
           add-paths: |
             charts/${{ matrix.chart.name }}/Chart.yaml
-          title: "${{ matrix.chart.name }}: bump AppVersion to ${{ env.RESOLVED_VERSION }}"
+          title: "${{ matrix.chart.name }}: bump AppVersion"
           body: |
-            The upstream application for the ${{ matrix.chart.name }} chart has been updated to version ${{ env.RESOLVED_VERSION }}.
+            The upstream application for the ${{ matrix.chart.name }} chart has been updated.
 
             This PR updates the charts appVersion accordingly.
-          commit-message: "${{ matrix.chart.name }}: bump AppVersion to ${{ env.RESOLVED_VERSION }}"
+          commit-message: "${{ matrix.chart.name }}: bump AppVersion"
           branch: maintenance/${{ matrix.chart.name }}-appVersion-bump
           labels: pr-${{ env.BUMP_SIZE }}
           delete-branch: true

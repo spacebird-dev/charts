@@ -1,9 +1,13 @@
 apiVersion: v2
 appVersion: 0.2.13
-description: A utility to automatically generate Ipv4 A DNS records for hosts based on existing AAAA records in a DNS zone.
+description:
+  A utility to automatically generate Ipv4 A DNS records for hosts based
+  on existing AAAA records in a DNS zone.
 maintainers:
-  - name: Max Hösel
-    email: github@maxhoesel.de
+  - email: github@maxhoesel.de
+    name: Max Hösel
 name: clouddns-nat-helper
+sources:
+  - https://github.com/spacebird-dev/clouddns-nat-helper
 type: application
 version: 0.2.14
