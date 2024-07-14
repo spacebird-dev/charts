@@ -32,10 +32,10 @@ jobs:
           python-version: "3.11"
 
       - name: Install pip dependencies
-        run: util/setup.sh
+        run: pip install -r requirements.txt
 
       - name: Update appVersion according to release difference
-        run: echo "BUMP_SIZE=$(source .venv/bin/activate && util/chart-version-updater.py appVersion ${{ matrix.chart.name }} --tag-prefix ${{ matrix.chart.tag_prefix }})" >> $GITHUB_ENV
+        run: echo "BUMP_SIZE=$(util/chart-version-updater.py appVersion ${{ matrix.chart.name }} --tag-prefix ${{ matrix.chart.tag_prefix }})" >> $GITHUB_ENV
 
       # 2-step process - we update the appVersion first, then open a PR with the bump size as a label
       # release-drafter can then work out the appropiate chart version from all relevant PRs
