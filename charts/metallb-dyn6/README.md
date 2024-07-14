@@ -1,50 +1,61 @@
+# metallb-dyn6
 
-Metallb-dyn6
-===========
+![Version: 0.1.2](https://img.shields.io/badge/Version-0.1.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.1](https://img.shields.io/badge/AppVersion-0.1.1-informational?style=flat-square)
 
-Dynamic Ipv6 prefix support for MetalLB
+Dynamic Ipv6 Prefix support for MetalLB
 
-Notes:
+## Installation
+
+To install this chart directly, use:
+
+`helm install --repo https://charts.spacebird.dev/ my-metallb-dyn6 metallb-dyn6`
+
+Alternatively, you can also add the repository like so:
+
+`helm repo add spacebird https://charts.spacebird.dev`
+
+And then install the chart from the repository reference:
+
+`helm install spacebird/my-metallb-dyn6 metallb-dyn6`
+
+### Notes
+
 - This chart **must** be installed in the same namespace as MetalLB! (Cross-namespace access through RBAC is not supported yet)
-- This chart automatically sets up a ServiceAccount and RoleBinding with edit access to the MetalLB namespace
-## Configuration
+- This chart automatically sets up a ServiceAccount and RoleBinding with edit access to the MetalLB namespace. This is required for the updater to function
 
-The following table lists the configurable parameters of the Metallb-dyn6 chart and their default values.
+## Values
 
-| Parameter                | Description             | Default        |
-| ------------------------ | ----------------------- | -------------- |
-| `image.repository` | Full path to the image file in the container registry | `"quay.io/spacebird-dev/metallb-dyn6"` |
-| `image.pullPolicy` |  | `"IfNotPresent"` |
-| `image.tag` | Optionally specify a custom tag. Defaults to the Chart appVersion | `""` |
-| `imagePullSecrets` |  | `[]` |
-| `nameOverride` |  | `""` |
-| `fullnameOverride` |  | `""` |
-| `loglevel` | Application loglevel. Can be error,warning,info,debug,trace | `"info"` |
-| `dyn6.source` | Source of the dynamic IPv6 network that will be injected into MetalLB. Can only be `my-ip` at this point. | `"my-ip"` |
-| `dyn6.subnetOverride.enabled` | Whether to enable the subnet override. Both override and prefix_length must be set if this is true. | `false` |
-| `dyn6.subnetOverride.override` | Override a portion of the prefix (usually the subnet). This value must be a valid IPv6 address. For example, to set the subnet to :beef: with a /48 dynamic prefix, use: 0:0:0:beef:: | `"0:0:0:00aa"` |
-| `dyn6.subnetOverride.prefixLength` | Length of the original network prefix that should be preserved when overriding the subnet with --subnet-override. For example, if you have a /48 prefix and are overriding the subnet with :beef:, set this to 48. | `56` |
-| `dyn6.updateInterval` | Time between attempts to refresh the dynamic Prefix and updating the IPAddressPool in seconds | `60` |
-| `metallb.hostRange` | Range of host addresses that MetalLB can use for allocating services. Must be passed as a range of Ipv6-Host-parts, such as ::1000-::1999 | `""` |
-| `metallb.pool` | Name of the IPAddressPool resource to manage | `""` |
-| `metallb.podsLabelSelector` | Use this label selector to filter pods when force-deleting MetalLB to refresh its configuration. Only pods that match this selector will be deleted. Only adjust this if your MetalLB instance is installed with a custom label name/instance. | `"app.kubernetes.io/name=metallb,app.kubernetes.io/instance=metallb"` |
-| `serviceAccount.annotations` | Annotations to add to the created ServiceAccount | `{}` |
-| `serviceAccount.name` | The name of the service account that metallb-dyn6 should use to update MetalLB. If not set, a name is generated using the fullname template | `""` |
-| `role.annotations` | Annotations to add to the created Role | `null` |
-| `role.name` | The name of the Role that will be created to let metallb-dyn6 update MetalLB. If not set, a name is generated using the fullname template | `""` |
-| `roleBinding.annotations` | Annotations to add to the created RoleBinding | `{}` |
-| `roleBinding.name` | The name of the RoleBinding that will be created for metallb-dyn6. If not set, a name is generated using the fullname template | `""` |
-| `podAnnotations` | Additional annotations for pod resources | `{}` |
-| `podSecurityContext` | Additional security context for pod resources | `{}` |
-| `securityContext` | Additional security context for this chart | `{}` |
-| `labels` |  | `null` |
-| `resources` | Optional resource limits for resources in this chart | `{}` |
-| `nodeSelector` |  | `{}` |
-| `tolerations` |  | `[]` |
-| `affinity` |  | `{}` |
+| Key | Type | Default | Description |
+|-----|------|---------|-------------|
+| affinity | object | `{}` |  |
+| dyn6.source | string | `"my-ip"` | Source of the dynamic IPv6 network that will be injected into MetalLB. Can only be `my-ip` at this point. |
+| dyn6.subnetOverride.enabled | bool | `false` | Whether to enable the subnet override. Both override and prefix_length must be set if this is true. |
+| dyn6.subnetOverride.override | string | `"0:0:0:00aa::"` | Override a portion of the prefix (usually the subnet). This value must be a valid IPv6 address. For example, to set the subnet to :beef: with a /48 dynamic prefix, use: 0:0:0:beef:: |
+| dyn6.subnetOverride.prefixLength | int | `56` |  |
+| dyn6.updateInterval | int | `60` | Time between attempts to refresh the dynamic Prefix and updating the IPAddressPool in seconds |
+| fullnameOverride | string | `""` |  |
+| image.pullPolicy | string | `"IfNotPresent"` |  |
+| image.repository | string | `"quay.io/spacebird-dev/metallb-dyn6"` |  |
+| image.tag | string | `""` |  |
+| imagePullSecrets | list | `[]` |  |
+| labels | string | `nil` |  |
+| loglevel | string | `"info"` | Application loglevel. Can be error,warning,info,debug,trace |
+| metallb.hostRange | string | `""` | Range of host addresses that MetalLB can use for allocating services. Must be passed as a range of Ipv6-Host-parts, such as ::1000-::1999 |
+| metallb.podsLabelSelector | string | `"app.kubernetes.io/name=metallb,app.kubernetes.io/instance=metallb"` | Use this label selector to filter pods when force-deleting MetalLB to refresh its configuration. Only pods that match this selector will be deleted. Only adjust this if your MetalLB instance is installed with a custom label name/instance. |
+| metallb.pool | string | `""` | Name of the IPAddressPool resource  to manage |
+| nameOverride | string | `""` |  |
+| nodeSelector | object | `{}` |  |
+| podAnnotations | object | `{}` |  |
+| podSecurityContext | object | `{}` |  |
+| resources | object | `{}` |  |
+| role.annotations | string | `nil` |  |
+| role.name | string | `""` |  |
+| roleBinding.annotations | object | `{}` |  |
+| roleBinding.name | string | `""` |  |
+| securityContext | object | `{}` |  |
+| serviceAccount.annotations | object | `{}` |  |
+| serviceAccount.name | string | `""` |  |
+| tolerations | list | `[]` |  |
 
-
-
----
-_Documentation generated by [Frigate](https://frigate.readthedocs.io)._
-
+----------------------------------------------
+Autogenerated from chart metadata using [helm-docs v1.14.2](https://github.com/norwoodj/helm-docs/releases/v1.14.2)

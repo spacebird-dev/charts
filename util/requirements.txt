@@ -1,4 +1,3 @@
 # Tooling for keeping the helm-chart up-to-date
 semver==3.0.2
-frigate==0.7.0
 pyyaml==6.0.1
