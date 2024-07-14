@@ -42,7 +42,7 @@ jobs:
         run: echo "RESOLVED_VERSION=$(echo ${{ steps.drafter.outputs.name }} | sed 's/${{ matrix.chart }}-//')" >> $GITHUB_ENV
 
       - name: Set chart version to determined version
-        run: echo "BUMP_SIZE=$(source .venv/bin/activate && util/chart-version-updater.py version ${{ env.RESOLVED_VERSION }})" >> $GITHUB_ENV
+        run: echo "BUMP_SIZE=$(source .venv/bin/activate && util/chart-version-updater.py version ${{ matrix.chart }} ${{ env.RESOLVED_VERSION }})" >> $GITHUB_ENV
 
       - name: Open PR for collection version update
         uses: peter-evans/create-pull-request@v6
