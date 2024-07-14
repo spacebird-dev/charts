@@ -94,4 +94,34 @@ entries:
     urls:
     - https://github.com/spacebird-dev/charts/releases/download/metallb-dyn6-0.1.0/metallb-dyn6-0.1.0.tgz
     version: 0.1.0
-generated: "2024-07-14T20:10:01.978006695Z"
+  paperless:
+  - apiVersion: v2
+    appVersion: 2.11.0
+    created: "2024-07-14T20:54:22.451807633Z"
+    dependencies:
+    - condition: redis.bundled.enabled
+      name: redis
+      repository: oci://registry-1.docker.io/bitnamicharts
+      version: 19.6.1
+    - condition: tika.bundled.enabled
+      name: tika
+      repository: https://apache.jfrog.io/artifactory/tika
+      version: 2.9.0-full
+    - condition: db.postgres.enabled
+      name: postgresql
+      repository: oci://registry-1.docker.io/bitnamicharts
+      version: 15.5.14
+    - condition: gotenberg.enabled
+      name: gotenberg
+      repository: https://maikumori.github.io/helm-charts
+      version: 1.5.0
+    description: Helm Chart to install paperless-ngx along with Tika and Gotenberg
+    digest: 1bf917b4edde3dc4f78d336ab9e116d039f4310387137fe42511d502da8a53d6
+    name: paperless
+    sources:
+    - https://github.com/paperless-ngx/paperless-ngx
+    type: application
+    urls:
+    - https://github.com/spacebird-dev/charts/releases/download/paperless-0.1.3/paperless-0.1.3.tgz
+    version: 0.1.3
+generated: "2024-07-14T20:54:22.451836708Z"
