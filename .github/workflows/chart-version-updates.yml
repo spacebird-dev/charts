@@ -45,7 +45,7 @@ jobs:
         run: echo "BUMP_SIZE=$(util/chart-version-updater.py version ${{ matrix.chart }} ${{ env.RESOLVED_VERSION }})" >> $GITHUB_ENV
 
       - name: Update versions in docs
-        run: cd charts/${{ matrix.chart }} make docs
+        run: cd charts/${{ matrix.chart }} && make docs
 
       - name: Open PR for collection version update
         uses: peter-evans/create-pull-request@v6

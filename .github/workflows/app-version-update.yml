@@ -38,7 +38,7 @@ jobs:
         run: echo "BUMP_SIZE=$(util/chart-version-updater.py appVersion ${{ matrix.chart.name }} --tag-prefix ${{ matrix.chart.tag_prefix }})" >> $GITHUB_ENV
 
       - name: Update versions in docs
-        run: cd charts/${{ matrix.chart.name}} make docs
+        run: cd charts/${{ matrix.chart.name}} && make docs
 
       # 2-step process - we update the appVersion first, then open a PR with the bump size as a label
       # release-drafter can then work out the appropiate chart version from all relevant PRs
