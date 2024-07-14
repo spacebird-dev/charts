@@ -23,12 +23,9 @@ jobs:
 
       - name: Install helm
         uses: azure/setup-helm@v4
-        with:
-          token: "${{ secrets.GITHUB_TOKEN }}"
 
       - name: Add dependency repositories
         run: |
-          helm repo add bitnami oci://registry-1.docker.io/bitnamicharts
           helm repo add tika https://apache.jfrog.io/artifactory/tika
           helm repo add maikumori https://maikumori.github.io/helm-charts
 
