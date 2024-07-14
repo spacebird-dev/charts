@@ -23,10 +23,7 @@ include-labels:
   - pr-minor
   - pr-patch
   - docs
-exclude-contributors:
-  - github-actions
-  - github-actions[bot]
-
+exclude-contributors: []
 change-template: "- $TITLE @$AUTHOR (#$NUMBER)"
 change-title-escapes: '\<*_&'
 
