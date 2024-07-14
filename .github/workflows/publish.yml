@@ -1,5 +1,5 @@
 ---
-name: CI
+name: Publish
 on:
   release:
     types:
@@ -26,10 +26,18 @@ jobs:
         with:
           token: "${{ secrets.GITHUB_TOKEN }}"
 
+      - name: Add dependency repositories
+        run: |
+          helm repo add bitnami oci://registry-1.docker.io/bitnamicharts
+          helm repo add tika https://apache.jfrog.io/artifactory/tika
+          helm repo add maikumori https://maikumori.github.io/helm-charts
+
+      # We cannot use the GitHub action here, because our release process is backwards -
+      # we create a release, then publish the chart. The action tries to create releases itself, which would mess with our approach
       - name: Package Helm Chart
         run: |
           # Install chart-releaser
-          curl -sSLo cr.tar.gz "https://github.com/helm/chart-releaser/releases/download/v1.6.0/chart-releaser_1.6.0_linux_amd64.tar.gz"
+          curl -sSLo cr.tar.gz "https://github.com/helm/chart-releaser/releases/download/v1.6.1/chart-releaser_1.6.1_linux_amd64.tar.gz"
           tar -xzf cr.tar.gz
           rm -f cr.tar.gz
 
