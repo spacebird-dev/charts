@@ -23,6 +23,10 @@ And then install the chart from the repository reference:
 - This chart **must** be installed in the same namespace as MetalLB! (Cross-namespace access through RBAC is not supported yet)
 - This chart automatically sets up a ServiceAccount and RoleBinding with edit access to the MetalLB namespace. This is required for the updater to function
 
+## Source Code
+
+* <https://github.com/spacebird-dev/metallb-dyn6>
+
 ## Values
 
 | Key | Type | Default | Description |

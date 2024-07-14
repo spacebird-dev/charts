@@ -18,6 +18,10 @@ And then install the chart from the repository reference:
 
 `helm install spacebird/my-clouddns-nat-helper clouddns-nat-helper`
 
+## Source Code
+
+* <https://github.com/spacebird-dev/clouddns-nat-helper>
+
 ## Values
 
 | Key | Type | Default | Description |

@@ -21,6 +21,10 @@ And then install the chart from the repository reference:
 
 `helm install spacebird/my-paperless paperless`
 
+## Source Code
+
+* <https://github.com/paperless-ngx/paperless-ngx>
+
 ## Requirements
 
 | Repository | Name | Version |
