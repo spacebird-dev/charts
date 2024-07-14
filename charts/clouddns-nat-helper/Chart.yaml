@@ -1,6 +1,9 @@
 apiVersion: v2
 appVersion: 0.2.13
-description: Autogenerate A records for NAT setups from AAAA records in cloud providers
+description: A utility to automatically generate Ipv4 A DNS records for hosts based on existing AAAA records in a DNS zone.
+maintainers:
+  - name: Max Hösel
+    email: github@maxhoesel.de
 name: clouddns-nat-helper
 type: application
 version: 0.2.14

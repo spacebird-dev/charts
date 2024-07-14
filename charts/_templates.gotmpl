@@ -1,0 +1,15 @@
+{{ define "installInfo" -}}
+## Installation
+
+To install this chart directly, use:
+
+`helm install --repo https://charts.spacebird.dev/ my-{{ template "chart.name" . }} {{ template "chart.name" . }}`
+
+Alternatively, you can also add the repository like so:
+
+`helm repo add spacebird https://charts.spacebird.dev`
+
+And then install the chart from the repository reference:
+
+`helm install spacebird/my-{{ template "chart.name" . }} {{ template "chart.name" . }}`
+{{- end -}}

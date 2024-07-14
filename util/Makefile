@@ -1,20 +1,4 @@
-SHELL := /bin/bash
+HELM_DOCS_TAG := "v1.14.2"
 
-venv:
-	python3 -m venv .venv
-	source .venv/bin/activate && pip install -r ../../util/requirements.txt --quiet
-
-set-app-version: venv
-	source .venv/bin/activate && ../../util/set_chart_version.py ./ app $(version)
-
-set-chart-version: venv
-	source .venv/bin/activate && ../../util/set_chart_version.py ./ chart $(version)
-
-get-version-bump-size: venv
-	source .venv/bin/activate && ../../util/version_from_app_release.py --output-only ./ $(version)
-
-version-from-app-release: venv
-	source .venv/bin/activate && ../../util/version_from_app_release.py ./ $(version)
-
-docs: venv
-	source .venv/bin/activate && frigate gen . > README.md
+docs:
+	docker run --rm -v "$$(pwd):/helm-docs" -v "$$(pwd)/../_templates.gotmpl:/_templates.gotmpl" -u $$(id -u) jnorwood/helm-docs:${HELM_DOCS_TAG} --template-files=/_templates.gotmpl --template-files=README.md.gotmpl

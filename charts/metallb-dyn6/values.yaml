@@ -1,43 +1,52 @@
 image:
-  repository: quay.io/spacebird-dev/metallb-dyn6 # Full path to the image file in the container registry
+  repository: quay.io/spacebird-dev/metallb-dyn6
   pullPolicy: IfNotPresent
-  tag: "" # Optionally specify a custom tag. Defaults to the Chart appVersion
+  tag: ""
 
 imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
 
-loglevel: info # Application loglevel. Can be error,warning,info,debug,trace
+# --Application loglevel. Can be error,warning,info,debug,trace
+loglevel: info
 
 dyn6:
-  source: my-ip # Source of the dynamic IPv6 network that will be injected into MetalLB. Can only be `my-ip` at this point.
+  # --Source of the dynamic IPv6 network that will be injected into MetalLB. Can only be `my-ip` at this point.
+  source: my-ip
   subnetOverride:
-    enabled: false # Whether to enable the subnet override. Both override and prefix_length must be set if this is true.
-    override: "0:0:0:00aa::" # Override a portion of the prefix (usually the subnet). This value must be a valid IPv6 address. For example, to set the subnet to :beef: with a /48 dynamic prefix, use: 0:0:0:beef::
-    prefixLength: 56 # Length of the original network prefix that should be preserved when overriding the subnet with --subnet-override. For example, if you have a /48 prefix and are overriding the subnet with :beef:, set this to 48.
-  updateInterval: 60 # Time between attempts to refresh the dynamic Prefix and updating the IPAddressPool in seconds
+    # --Whether to enable the subnet override. Both override and prefix_length must be set if this is true.
+    enabled: false
+    # --Override a portion of the prefix (usually the subnet). This value must be a valid IPv6 address. For example, to set the subnet to :beef: with a /48 dynamic prefix, use: 0:0:0:beef::
+    override: "0:0:0:00aa::"
+    # --Length of the original network prefix that should be preserved when overriding the subnet with --subnet-override. For example, if you have a /48 prefix and are overriding the subnet with :beef:, set this to 48.
+    prefixLength: 56
+  # --Time between attempts to refresh the dynamic Prefix and updating the IPAddressPool in seconds
+  updateInterval: 60
 
 metallb:
-  hostRange: "" # Range of host addresses that MetalLB can use for allocating services. Must be passed as a range of Ipv6-Host-parts, such as ::1000-::1999
-  pool: "" # Name of the IPAddressPool resource to manage
-  podsLabelSelector: "app.kubernetes.io/name=metallb,app.kubernetes.io/instance=metallb" # Use this label selector to filter pods when force-deleting MetalLB to refresh its configuration. Only pods that match this selector will be deleted. Only adjust this if your MetalLB instance is installed with a custom label name/instance.
+  # --Range of host addresses that MetalLB can use for allocating services. Must be passed as a range of Ipv6-Host-parts, such as ::1000-::1999
+  hostRange: ""
+  # --Name of the IPAddressPool resource  to manage
+  pool: ""
+  # --Use this label selector to filter pods when force-deleting MetalLB to refresh its configuration. Only pods that match this selector will be deleted. Only adjust this if your MetalLB instance is installed with a custom label name/instance.
+  podsLabelSelector: "app.kubernetes.io/name=metallb,app.kubernetes.io/instance=metallb"
 
 serviceAccount:
-  annotations: {} # Annotations to add to the created ServiceAccount
-  name: "" # The name of the service account that metallb-dyn6 should use to update MetalLB. If not set, a name is generated using the fullname template
+  annotations: {}
+  name: ""
 role:
-  annotations: # Annotations to add to the created Role
-  name: "" # The name of the Role that will be created to let metallb-dyn6 update MetalLB. If not set, a name is generated using the fullname template
+  annotations:
+  name: ""
 roleBinding:
-  annotations: {} # Annotations to add to the created RoleBinding
-  name: "" # The name of the RoleBinding that will be created for metallb-dyn6. If not set, a name is generated using the fullname template
+  annotations: {}
+  name: ""
 
-podAnnotations: {} # Additional annotations for pod resources
-podSecurityContext: {} # Additional security context for pod resources
-securityContext: {} # Additional security context for this chart
+podAnnotations: {}
+podSecurityContext: {}
+securityContext: {}
 labels:
 
-resources: {} # Optional resource limits for resources in this chart
+resources: {}
 nodeSelector: {}
 tolerations: []
 affinity: {}
