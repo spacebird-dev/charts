@@ -1,0 +1,48 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "paperless.fullname" . }}-config
+data:
+  USERMAP_UID: {{ .Values.paperless.podSecurityContext.fsGroup | quote }}
+  USERMAP_GID: {{ .Values.paperless.podSecurityContext.fsGroup | quote }}
+  PAPERLESS_PORT: "8000"
+  PAPERLESS_APP_TITLE: {{ .Values.paperless.appTitle }}
+  PAPERLESS_URL: {{ .Values.paperless.url }}
+{{- if .Values.db.external.type }}
+  PAPERLESS_DBENGINE: {{ .Values.db.external.type }}
+{{- else if not .Values.db.sqlite.enabled }}
+  PAPERLESS_DBENGINE: {{ .Values.db.postgres.enabled | ternary "postgresql" "mariadb" }}
+{{- end -}}
+{{- if or .Values.db.external.sslRootCert.certificate .Values.db.external.sslRootCert.existingSecret }}
+  PAPERLESS_DBSSLROOTCERT: /etc/ssl/paperless-root-cert/cert
+{{- end }}
+{{- if or .Values.db.external.sslClientCert.certificate .Values.db.external.sslClientCert.existingSecret }}
+  PAPERLESS_DBSSLCERT: /etc/ssl/paperless-client-cert/cert
+{{- end }}
+{{- if or .Values.db.external.sslClientKey.key .Values.db.external.sslClientKey.existingSecret }}
+  PAPERLESS_DBSSLKEY: /etc/ssl/paperless-client-key/key
+{{- end }}
+  PAPERLESS_DATA_DIR: {{ .Values.paperless.volumes.data.mountPath }}
+  PAPERLESS_MEDIA_DIR: {{ .Values.paperless.volumes.media.mountPath }}
+  PAPERLESS_CONSUMPTION_DIR: {{ .Values.paperless.volumes.consumption.mountPath }}
+  PAPERLESS_OCR_LANGUAGE: {{ .Values.paperless.ocr.defaultLanguage }}
+  PAPERLESS_OCR_LANGUAGES: {{ .Values.paperless.ocr.extraLanguages }}
+{{- if .Values.paperless.pathPrefix }}
+  PAPERLESS_FORCE_SCRIPT_NAME: {{ .Values.paperless.pathPrefix }}
+  PAPERLESS_STATIC_URL: {{ .Values.paperless.pathPrefix }}/static/
+{{- end }}
+{{- if .Values.tika.external.endpoint }}
+  PAPERLESS_TIKA_ENABLED: "true"
+  PAPERLESS_TIKA_ENDPOINT: {{ .Values.tika.external.endpoint }}
+{{- else if .Values.tika.enabled }}
+  PAPERLESS_TIKA_ENABLED: "true"
+  PAPERLESS_TIKA_ENDPOINT: {{ printf "http://%s" (include "tika-helm.fullname" .Subcharts.tika) }}:{{ .Values.tika.service.port }}
+{{- end }}
+{{- if .Values.gotenberg.external.endpoint }}
+  PAPERLESS_TIKA_GOTENBERG_ENDPOINT: {{ .Values.gotenberg.external.endpoint }}
+{{- else if .Values.gotenberg.enabled }}
+  PAPERLESS_TIKA_GOTENBERG_ENDPOINT: {{ printf "http://%s:%d" (include "gotenberg.fullname" .Subcharts.gotenberg) (int .Values.gotenberg.service.port) }}
+{{- end }}
+{{- with .Values.paperless.extraConfig }}
+  {{- toYaml . | nindent 2 }}
+{{- end }}

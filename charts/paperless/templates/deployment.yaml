@@ -1,0 +1,282 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "paperless.fullname" . }}
+  labels:
+    {{- include "paperless.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "paperless.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.paperless.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "paperless.labels" . | nindent 8 }}
+        {{- with .Values.paperless.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- with .Values.paperless.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      securityContext:
+        {{- toYaml .Values.paperless.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.paperless.securityContext | nindent 12 }}
+          image: "{{ .Values.paperless.image.repository }}:{{ .Values.paperless.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.paperless.image.pullPolicy }}
+          env:
+            - name: PAPERLESS_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+          {{- if .Values.paperless.secretKey.existingSecret }}
+                  {{- toYaml .Values.paperless.secretKey.existingSecret | nindent 18 }}
+          {{- else }}
+                  name: {{ include "paperless.fullname" . }}-key
+                  key: PAPERLESS_SECRET_KEY
+          {{- end }}
+          {{- if .Values.redis.external.existingSecret }}
+            - name: PAPERLESS_REDIS
+              valueFrom:
+                secretKeyRef:
+                  {{- toYaml .Values.redis.external.existingSecret | nindent 18 }}
+          {{- end }}
+          {{- if .Values.db.external.type }}
+          {{- if .Values.db.external.host.existingSecret }}
+            - name: PAPERLESS_DBHOST
+              valueFrom:
+                secretKeyRef:
+                  {{- toYaml .Values.db.external.host.existingSecret | nindent 18 }}
+          {{- end }}
+          {{- if .Values.db.external.port.existingSecret }}
+            - name: PAPERLESS_DBPORT
+              valueFrom:
+                secretKeyRef:
+                  {{- toYaml .Values.db.external.port.existingSecret | nindent 18 }}
+          {{- end }}
+          {{- if .Values.db.external.database.existingSecret }}
+            - name: PAPERLESS_DBNAME
+              valueFrom:
+                secretKeyRef:
+                  {{- toYaml .Values.db.external.database.existingSecret | nindent 18 }}
+          {{- end }}
+          {{- if .Values.db.external.user.existingSecret }}
+            - name: PAPERLESS_DBUSER
+              valueFrom:
+                secretKeyRef:
+                  {{- toYaml .Values.db.external.user.existingSecret | nindent 18 }}
+          {{- end }}
+          {{- if .Values.db.external.password.existingSecret }}
+            - name: PAPERLESS_DBPASS
+              valueFrom:
+                secretKeyRef:
+                  {{- toYaml .Values.db.external.password.existingSecret | nindent 18 }}
+          {{- end }}
+          {{- end }}
+          {{- if .Values.paperless.admin.enabled }}
+          {{- if .Values.paperless.admin.user.existingSecret }}
+            - name: PAPERLESS_ADMIN_USER
+              valueFrom:
+                secretKeyRef:
+                  {{- toYaml .Values.paperless.admin.user.existingSecret | nindent 18 }}
+          {{- end }}
+          {{- if .Values.paperless.admin.email.existingSecret }}
+            - name: PAPERLESS_ADMIN_MAIL
+              valueFrom:
+                secretKeyRef:
+                  {{- toYaml .Values.paperless.admin.email.existingSecret | nindent 18 }}
+          {{- end }}
+          {{- if .Values.paperless.admin.password.existingSecret }}
+            - name: PAPERLESS_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  {{- toYaml .Values.paperless.admin.password.existingSecret | nindent 18 }}
+          {{- end }}
+          {{- end }}
+          {{- if .Values.paperless.smtp.host.existingSecret }}
+            - name: PAPERLESS_EMAIL_HOST
+              valueFrom:
+                secretKeyRef:
+                  {{- toYaml .Values.paperless.smtp.host.existingSecret | nindent 18 }}
+          {{- end }}
+          {{- if .Values.paperless.smtp.port.existingSecret }}
+            - name: PAPERLESS_EMAIL_PORT
+              valueFrom:
+                secretKeyRef:
+                  {{- toYaml .Values.paperless.smtp.port.existingSecret | nindent 18 }}
+          {{- end }}
+          {{- if .Values.paperless.smtp.user.existingSecret }}
+            - name: PAPERLESS_EMAIL_HOST_USER
+              valueFrom:
+                secretKeyRef:
+                  {{- toYaml .Values.paperless.smtp.user.existingSecret | nindent 18 }}
+          {{- end }}
+          {{- if .Values.paperless.smtp.from.existingSecret }}
+            - name: PAPERLESS_EMAIL_FROM
+              valueFrom:
+                secretKeyRef:
+                  {{- toYaml .Values.paperless.smtp.from.existingSecret | nindent 18 }}
+          {{- end }}
+          {{- if .Values.paperless.smtp.password.existingSecret }}
+            - name: PAPERLESS_EMAIL_HOST_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  {{- toYaml .Values.paperless.smtp.password.existingSecret | nindent 18 }}
+          {{- end }}
+          envFrom:
+            - configMapRef:
+                name: {{ include "paperless.fullname" . }}-config
+            - secretRef:
+                name: {{ include "paperless.fullname" . }}-app
+          {{- if and .Values.paperless.admin.enabled (or (not .Values.paperless.admin.user.existingSecret) (not .Values.paperless.admin.email.existingSecret) (not .Values.paperless.admin.password.existingSecret)) }}
+            - secretRef:
+                name: {{ include "paperless.fullname" . }}-admin
+          {{- end }}
+            - secretRef:
+                name: {{ include "paperless.fullname" . }}-smtp
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.port }}
+              protocol: TCP
+          livenessProbe:
+            {{- toYaml .Values.livenessProbe | nindent 12 }}
+          readinessProbe:
+            {{- toYaml .Values.readinessProbe | nindent 12 }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+          {{- if .Values.db.external.sslRootCert.existingSecret }}
+            - name: sslRootCert
+              mountPath: /etc/ssl/paperless-root-cert/
+              readOnly: true
+          {{- end }}
+          {{- if .Values.db.external.sslClientCert.existingSecret }}
+            - name: sslClientCert
+              mountPath: /etc/ssl/paperless-client-cert/
+              readOnly: true
+          {{- end }}
+          {{- if .Values.db.external.sslClientKey.existingSecret }}
+            - name: sslClientKey
+              mountPath: /etc/ssl/paperless-client-key/
+              readOnly: true
+          {{- end }}
+          {{- if .Values.paperless.volumes.consumption.existingVolume }}
+            - name: consumption
+              mountPath: {{ .Values.paperless.volumes.consumption.mountPath }}
+          {{- end }}
+          {{- if or .Values.paperless.volumes.data.existingVolume .Values.paperless.volumes.data.persistence.enabled }}
+            - name: data
+              mountPath: {{ .Values.paperless.volumes.data.mountPath }}
+          {{- end }}
+          {{- if or .Values.paperless.volumes.media.existingVolume .Values.paperless.volumes.media.persistence.enabled }}
+            - name: media
+              mountPath: {{ .Values.paperless.volumes.media.mountPath }}
+          {{- end }}
+          {{- if .Values.paperless.volumes.export.existingVolume }}
+            - name: export
+              mountPath: {{ .Values.paperless.volumes.export.mountPath }}
+          {{- end }}
+          {{- with .Values.extraVolumeMounts }}
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+      volumes:
+      {{- if .Values.db.external.sslRootCert.existingSecret }}
+        - name: sslRootCert
+          secret:
+            secretName: {{ .Values.db.external.sslRootCert.existingSecret.name }}
+            items:
+              - key: {{ .Values.db.external.sslRootCert.existingSecret.key }}
+                path: cert
+      {{- else if .Values.db.external.sslRootCert.certificate }}
+        - name: sslRootCert
+          secret:
+            secretName: {{ include "paperless.fullname" . }}-app
+            item:
+              - key: root-cert
+                path: cert
+      {{- end }}
+      {{- if .Values.db.external.sslClientCert.existingSecret }}
+        - name: sslClientCert
+          secret:
+            secretName: {{ .Values.db.external.sslClientCert.existingSecret.name }}
+            items:
+              - key: {{ .Values.db.external.sslClientCert.existingSecret.key }}
+                path: cert
+      {{- else if .Values.db.external.sslClientCert.certificate }}
+        - name: sslClientCert
+          secret:
+            secretName: {{ include "paperless.fullname" . }}-app
+            item:
+              - key: client-cert
+                path: cert
+      {{- end }}
+      {{- if .Values.db.external.sslClientKey.existingSecret }}
+        - name: sslClientKey
+          secret:
+            secretName: {{ .Values.db.external.sslClientKey.existingSecret.name }}
+            items:
+              - key: {{ .Values.db.external.sslClientKey.existingSecret.key }}
+                path: key
+      {{- else if .Values.db.external.sslClientKey.key }}
+        - name: sslClientKey
+          secret:
+            secretName: {{ include "paperless.fullname" . }}-app
+            item:
+              - key: client-key
+                path: key
+      {{- end }}
+      {{- if .Values.paperless.volumes.consumption.existingVolume }}
+      {{- with .Values.paperless.volumes.consumption.existingVolume }}
+        - name: consumption
+          {{- toYaml . | nindent 10 }}
+      {{- end }}
+      {{- end }}
+      {{- if .Values.paperless.volumes.data.existingVolume }}
+      {{- with .Values.paperless.volumes.data.existingVolume }}
+        - name: data
+          {{- toYaml . | nindent 10 }}
+      {{- end }}
+      {{- else if .Values.paperless.volumes.data.persistence.enabled }}
+        - name: data
+          persistentVolumeClaim:
+            claimName: {{ include "paperless.fullname" . }}-data
+      {{- end }}
+      {{- if .Values.paperless.volumes.media.existingVolume }}
+      {{- with .Values.paperless.volumes.media.existingVolume }}
+        - name: media
+          {{- toYaml . | nindent 10 }}
+      {{- end }}
+      {{- else if .Values.paperless.volumes.media.persistence.enabled }}
+        - name: media
+          persistentVolumeClaim:
+            claimName: {{ include "paperless.fullname" . }}-media
+      {{- end }}
+      {{- if .Values.paperless.volumes.export.existingVolume }}
+        - name: export
+      {{- with .Values.paperless.volumes.export.existingVolume }}
+          {{- toYaml . | nindent 10 }}
+      {{- end }}
+      {{- end }}
+      {{- with .Values.paperless.extraVolumes }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.paperless.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.paperless.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.paperless.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

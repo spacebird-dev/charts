@@ -1,0 +1,319 @@
+nameOverride: ""
+fullnameOverride: ""
+
+paperless:
+  imagePullSecrets: []
+  image:
+    repository: "ghcr.io/paperless-ngx/paperless-ngx"
+    pullPolicy: IfNotPresent
+    # -- Overrides the image tag whose default is the chart appVersion.
+    tag: ""
+
+  url: https://paperless-ngx.example.com
+  # -- Set if accessing paperless via a domain subpath e.g. https://domain.com/PATHPREFIX and using a reverse-proxy like traefik or nginx. Expects a prefix like "/prefix-path"
+  pathPrefix: ""
+  # -- Override the default app title shown in the frontend
+  appTitle: "Paperless-ngx"
+
+  secretKey:
+    # -- Paperless server secret for tokens/etc. This should be a long random string
+    value: ""
+    existingSecret: {}
+    #  name: ""
+    #  key: ""
+  # -- Paperless server Timezone
+  tz: UTC
+  ocr:
+    # -- OCR default language. See https://packages.debian.org/search?keywords=tesseract-ocr-&searchon=names&suite=buster
+    defaultLanguage: eng
+    # -- OCR extra languages.
+    extraLanguages: deu fra
+
+  admin:
+    # -- Whether to install a default admin user with the provided credentials.
+    enabled: false
+    user:
+      # -- Name of the admin user
+      name: "admin"
+      existingSecret: {}
+      #  name: ""
+      #  key: ""
+    email:
+      # -- Email of the admin user
+      address: "admin@exmaple.com"
+      existingSecret: {}
+      #  name: ""
+      #  key: ""
+    password:
+      # -- Password of the admin user
+      value: ""
+      existingSecret: {}
+      #  name: ""
+      #  key: ""
+
+  smtp:
+    host:
+      # -- SMTP host to relay Emails to
+      name: localhost
+      existingSecret: {}
+      #  name: ""
+      #  key: ""
+    port:
+      # -- Port of the SMTP host
+      value: 25
+      existingSecret: {}
+      #  name: ""
+      #  key: ""
+    user:
+      # -- SMTP login user
+      name: ""
+      existingSecret: {}
+      #  name: ""
+      #  key: ""
+    from:
+      # -- SMTP FROM email address
+      address: "no-reply-paperless@exmaple.com"
+      existingSecret: {}
+      #  name: ""
+      #  key: ""
+    password:
+      # -- SMTP login password
+      value: ""
+      existingSecret: {}
+      #  name: ""
+      #  key: ""
+    # -- Whether to enable SMTP encryption or not. Valid options are false/"", "ssl", "tls"
+    encryption: ""
+
+  # -- Additional Configuration parameters to pass to paperless. Expects key-value pairs of config options and values. See https://docs.paperless-ngx.com/configuration
+  extraConfig: {}
+  #  PAPERLESS_CONSUMER_POLLING: 30
+
+  volumes:
+    consumption:
+      mountPath: /usr/src/paperless/consume
+      # -- Specify a volume to mount as the consumption directory.
+      # If left unspecified, the consumption directory will not be exposed,
+      # so uploads will only be possible via the API/WebUI
+      existingVolume: {}
+      #  nfs:
+      #    server: my-server.example.com
+      #    path: /mnt/nfs/paperless/consumption
+    data:
+      mountPath: /usr/src/paperless/data
+      persistence:
+        # -- Enable persistence for the data directory containing paperless application data.
+        # Disable for an ephemeral install.
+        # Ignored if `existingVolume` is specified
+        enabled: true
+        annotations: {}
+        storageClass: ""
+        accessMode: ReadWriteOnce
+        size: 5Gi
+      # -- Use an existing volume for data persistence instead of the auto-generated PV.
+      existingVolume: {}
+      #  nfs:
+      #    server: my-server.example.com
+      #    path: /mnt/nfs/paperless/data
+    media:
+      mountPath: /usr/src/paperless/media
+      persistence:
+        # -- Enable persistence for the media directory containing processed documents.
+        # Disable for an ephemeral install.
+        # Ignored if `existingVolume` is specified
+        enabled: true
+        annotations: {}
+        storageClass: ""
+        accessMode: ReadWriteOnce
+        size: 5Gi
+      # -- Use an existing volume for media persistence instead of the included pvc.
+      existingVolume: {}
+      #  nfs:
+      #    server: my-server.example.com
+      #    path: /mnt/nfs/paperless/media
+    export:
+      mountPath: /usr/src/paperless/export
+      # -- Specify a volume to mount for exporting data from paperless.
+      # If left unspecified, there will be no exposed export path
+      existingVolume: {}
+      #  nfs:
+      #    server: my-server.example.com
+      #    path: /mnt/nfs/paperless/export
+
+  extraVolumes: []
+  # - name: consumption
+  #   :
+  #     secretName: mysecret
+  #     optional: false
+  extraVolumeMounts: []
+  # - name: foo
+  #   mountPath: "/etc/foo"
+  #   readOnly: true
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+  podAnnotations: {}
+  podLabels: {}
+  podSecurityContext:
+    fsGroup: 1000
+  securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+  resources: {}
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+  livenessProbe:
+    httpGet:
+      path: /
+      port: http
+  readinessProbe:
+    httpGet:
+      path: /
+      port: http
+
+service:
+  # -- How to expose paperless to the k8s cluster. If you want to configure external access, use the `ingress` configuration instead.
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+  hosts:
+    - host: paperless-ngx.example.com
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls: []
+  #  - secretName: paperless-ngx-tls
+  #    hosts:
+  #      - paperless-ngx.example.com
+
+redis:
+  bundled:
+    # -- Install a managed redis instance.
+    # Ignored if an external redis server is defined below
+    enabled: true
+  # -- Architecture of the managed redis instance. Defaults to single-node master operation.
+  # Note that changing this value is untested and may have undesirable results.
+  architecture: standalone
+  master:
+    persistence:
+      enabled: false
+  auth:
+    enabled: true
+    # -- Password for the bundled redis service
+    password: paperless
+  external:
+    # -- Use an external redis server through its url starting with redis://
+    url: ""
+    existingSecret:
+    #  name: ""
+    #  key: ""
+
+tika:
+  bundled:
+    # -- Use the bundled tika install for document processing. Ignored if `external.endpoint` is set
+    enabled: true
+  external:
+    # -- External Tika URL as expected by paperless, e.g: http://localhost:9998
+    endpoint: ""
+
+gotenberg:
+  bundled:
+    # -- Use the bundled gotenberg install. Ignored if `external.endpoint` is set
+    enabled: true
+  external:
+    # -- Gotenberg URL as expected by paperless, e.g: http://localhost:3000
+    endpoint: ""
+
+db:
+  sqlite:
+    # -- Use the integrated sqlite database, enabled by default
+    # The database is stored in the data PVC
+    # If disabled, you must use another bundled/external DB
+    enabled: true
+  postgres:
+    # -- Install a postgresql database instead of SQLite.
+    # If enabled, you must not use another bundled/external DB
+    enabled: false
+  mariadb:
+    # -- Install a mariadb database instead of SQLite.
+    # If enabled, you must not use another bundled/external DB
+    enabled: false
+  external:
+    # -- If not empty, will skip db installation and use an external database instead.
+    # Accepted values are "" (managed install), "mariadb" and "postgresql"
+    type: ""
+    host:
+      # -- Remote DB hostname
+      name: ""
+      existingSecret: {}
+      #  name: ""
+      #  key: ""
+    port:
+      # -- Remote DB port
+      value: 5432
+      existingSecret: {}
+      #  name: ""
+      #  key: ""
+    database:
+      # -- Remote DB databse
+      name: ""
+      existingSecret: {}
+      #  name: ""
+      #  key: ""
+    user:
+      # -- Remote DB username
+      name: ""
+      existingSecret: {}
+      #  name: ""
+      #  key: ""
+    password:
+      # -- Remote DB password
+      value: ""
+      existingSecret: {}
+      #  name: ""
+      #  key: ""
+    # -- Remote DB SSL/TLS connection mode. See https://docs.paperless-ngx.com/configuration/#PAPERLESS_DBSSLMODE
+    sslMode: ""
+    sslRootCert:
+      # -- Remote DB server TLS certificate
+      certificate: ""
+      existingSecret: {}
+      #  name: ""
+      #  key: ""
+    sslClientCert:
+      # -- Remote DB client TLS certificate
+      certificate: ""
+      existingSecret: {}
+      #  name: ""
+      #  key: ""
+    sslClientKey:
+      # -- Remote DB client TLS key
+      key: ""
+      existingSecret: {}
+      #  name: ""
+      #  key: ""
+
+# -- Default credentials for the bundled postgres DB
+postgresql:
+  auth:
+    username: paperless
+    database: paperless
+    password: paperless
+# -- Default credentials for the bundled mariadb DB
+mariadb:
+  auth:
+    username: paperless
+    database: paperless
+    password: paperless
