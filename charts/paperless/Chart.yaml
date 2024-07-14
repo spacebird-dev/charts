@@ -1,0 +1,23 @@
+apiVersion: v2
+name: paperless
+description: Helm Chart to install paperless-ngx along with Tika and Gotenberg
+type: application
+version: 0.1.0
+appVersion: "2.10.2"
+dependencies:
+  - name: redis
+    repository: oci://registry-1.docker.io/bitnamicharts
+    version: "19.6.1"
+    condition: redis.bundled.enabled
+  - name: tika
+    repository: https://apache.jfrog.io/artifactory/tika
+    version: "2.9.0-full"
+    condition: tika.bundled.enabled
+  - name: postgresql
+    repository: oci://registry-1.docker.io/bitnamicharts
+    version: "15.5.14"
+    condition: db.postgres.enabled
+  - name: gotenberg
+    repository: https://maikumori.github.io/helm-charts
+    version: "1.5.0"
+    condition: gotenberg.enabled

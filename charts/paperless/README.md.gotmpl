@@ -1,0 +1,41 @@
+{{ template "chart.header" . }}
+{{ template "chart.deprecationWarning" . }}
+
+{{ template "chart.badgesSection" . }}
+
+{{ template "chart.description" . }}
+
+Please note that this chart is still relatively new and not all features/values have been tested.
+If you encounter any issues/bugs, feel free to file an issue/PR!
+
+{{ template "chart.homepageLine" . }}
+
+{{ template "installInfo" . }}
+
+{{ template "chart.sourcesSection" . }}
+
+{{ template "chart.requirementsSection" . }}
+
+{{ template "chart.valuesSection" . }}
+
+### Note on `existingSecret`
+
+Many of the values in the chart can also be sourced from existing secrets.
+Check `values.yaml`, if a key has an `existingSecret` sibling, you can uncomment the `existingSecret` definition and it will take precedence over the directly supplied value.
+
+Example:
+
+```yaml
+paperless:
+  secretKey:
+    # -- Paperless server secret for tokens/etc. This should be a long random string
+    value: ""
+    existingSecret: {}
+    # 👇 Uncomment this, remove the empty braces and supply a secret to use the value form said secret instead of `value`.
+    #  name: ""
+    #  key: ""
+```
+
+{{ template "chart.maintainersSection" . }}
+
+{{ template "helm-docs.versionFooter" . }}

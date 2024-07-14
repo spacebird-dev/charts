@@ -20,6 +20,9 @@ jobs:
           - name: clouddns-nat-helper
             repository: spacebird-dev/clouddns-nat-helper
             trim_prefix: "v"
+          - name: paperless
+            repository: paperless-ngx/paperless-ngx
+            trim_prefix: "Paperless-ngx v"
     steps:
       - name: Check out codebase
         uses: actions/checkout@v4
