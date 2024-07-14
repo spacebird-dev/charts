@@ -48,6 +48,18 @@ entries:
   metallb-dyn6:
   - apiVersion: v2
     appVersion: 0.1.1
+    created: "2024-07-14T20:09:48.877305982Z"
+    description: Dynamic Ipv6 Prefix support for MetalLB
+    digest: 08dff0cbdb35f39ebb0de793c7fb9fa3ffa549f531d31419bb2c58c5f9740c9c
+    name: metallb-dyn6
+    sources:
+    - https://github.com/spacebird-dev/metallb-dyn6
+    type: application
+    urls:
+    - https://github.com/spacebird-dev/charts/releases/download/metallb-dyn6-0.1.2/metallb-dyn6-0.1.2.tgz
+    version: 0.1.2
+  - apiVersion: v2
+    appVersion: 0.1.1
     created: "2023-09-06T12:16:17.378600045Z"
     description: Dynamic Ipv6 Prefix support for MetalLB
     digest: bf9b20986c1b9b14724807a85c982a2804e226c85b676074e5621b0d548ee599
@@ -66,4 +78,4 @@ entries:
     urls:
     - https://github.com/spacebird-dev/charts/releases/download/metallb-dyn6-0.1.0/metallb-dyn6-0.1.0.tgz
     version: 0.1.0
-generated: "2024-06-09T23:15:37.82877909Z"
+generated: "2024-07-14T20:09:48.877355114Z"
