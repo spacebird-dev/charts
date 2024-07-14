@@ -3,6 +3,22 @@ entries:
   clouddns-nat-helper:
   - apiVersion: v2
     appVersion: 0.2.13
+    created: "2024-07-14T20:10:01.977973864Z"
+    description: A utility to automatically generate Ipv4 A DNS records for hosts
+      based on existing AAAA records in a DNS zone.
+    digest: 54ca753403326db82fbc09b04e849861ffa2def04497e2cf42fc233d576d0a83
+    maintainers:
+    - email: github@maxhoesel.de
+      name: Max Hösel
+    name: clouddns-nat-helper
+    sources:
+    - https://github.com/spacebird-dev/clouddns-nat-helper
+    type: application
+    urls:
+    - https://github.com/spacebird-dev/charts/releases/download/clouddns-nat-helper-0.2.15/clouddns-nat-helper-0.2.15.tgz
+    version: 0.2.15
+  - apiVersion: v2
+    appVersion: 0.2.13
     created: "2024-06-09T23:15:37.828759864Z"
     description: Autogenerate A records for NAT setups from AAAA records in cloud
       providers
@@ -78,4 +94,4 @@ entries:
     urls:
     - https://github.com/spacebird-dev/charts/releases/download/metallb-dyn6-0.1.0/metallb-dyn6-0.1.0.tgz
     version: 0.1.0
-generated: "2024-07-14T20:09:48.877355114Z"
+generated: "2024-07-14T20:10:01.978006695Z"
