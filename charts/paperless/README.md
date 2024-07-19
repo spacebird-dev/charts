@@ -25,15 +25,6 @@ And then install the chart from the repository reference:
 
 * <https://github.com/paperless-ngx/paperless-ngx>
 
-## Requirements
-
-| Repository | Name | Version |
-|------------|------|---------|
-| https://apache.jfrog.io/artifactory/tika | tika | 2.9.0-full |
-| https://maikumori.github.io/helm-charts | gotenberg | 1.5.0 |
-| oci://registry-1.docker.io/bitnamicharts | postgresql | 15.5.14 |
-| oci://registry-1.docker.io/bitnamicharts | redis | 19.6.1 |
-
 ## Values
 
 | Key | Type | Default | Description |
