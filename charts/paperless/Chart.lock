@@ -4,12 +4,12 @@ dependencies:
   version: 19.6.1
 - name: tika
   repository: https://apache.jfrog.io/artifactory/tika
-  version: 2.9.0-full
+  version: 2.9.0
 - name: postgresql
   repository: oci://registry-1.docker.io/bitnamicharts
   version: 15.5.14
 - name: gotenberg
   repository: https://maikumori.github.io/helm-charts
   version: 1.5.0
-digest: sha256:d09cf2842b1b36172422e3c03f5c6bc15df4f69e2c8065c6e8df1af7093149c1
-generated: "2024-07-14T22:11:50.802197598+02:00"
+digest: sha256:4b228a163f1abc170a4773665ca407eee0c798c9aca40358b8df53f2dbdbe7f6
+generated: "2024-07-19T18:42:23.883478257Z"
