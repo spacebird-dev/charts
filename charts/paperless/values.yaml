@@ -9,6 +9,9 @@ paperless:
     # -- Overrides the image tag whose default is the chart appVersion.
     tag: ""
 
+  # -- Number of deployment replicas. Note that the paperless container is not ready for multi-replica deployments
+  replicaCount: 1
+
   url: https://paperless-ngx.example.com
   # -- Set if accessing paperless via a domain subpath e.g. https://domain.com/PATHPREFIX and using a reverse-proxy like traefik or nginx. Expects a prefix like "/prefix-path"
   pathPrefix: ""
