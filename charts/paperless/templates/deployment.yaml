@@ -5,7 +5,7 @@ metadata:
   labels:
     {{- include "paperless.labels" . | nindent 4 }}
 spec:
-  replicas: 1
+  replicas: {{ .Values.paperless.replicaCount }}
   selector:
     matchLabels:
       {{- include "paperless.selectorLabels" . | nindent 6 }}

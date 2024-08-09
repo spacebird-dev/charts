@@ -89,6 +89,7 @@ And then install the chart from the repository reference:
 | paperless.podSecurityContext.fsGroup | int | `1000` |  |
 | paperless.readinessProbe.httpGet.path | string | `"/"` |  |
 | paperless.readinessProbe.httpGet.port | string | `"http"` |  |
+| paperless.replicaCount | int | `1` | Number of deployment replicas. Note that the paperless container is not ready for multi-replica deployments |
 | paperless.resources | object | `{}` |  |
 | paperless.secretKey.existingSecret | object | `{}` |  |
 | paperless.secretKey.value | string | `""` | Paperless server secret for tokens/etc. This should be a long random string |
