@@ -7,9 +7,9 @@ dependencies:
   version: 2.9.0
 - name: postgresql
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 15.5.21
+  version: 15.5.22
 - name: gotenberg
   repository: https://maikumori.github.io/helm-charts
   version: 1.6.0
-digest: sha256:4006729f068b78a9acf45ca1d3f58c841c421d244d0d9909a3950e019408fc88
-generated: "2024-08-10T02:53:50.387558353Z"
+digest: sha256:3068e8b067a4d96708ab9cc5074b471872a43bed7de822174b12a76b4f2f2400
+generated: "2024-08-17T00:26:23.684151966Z"
