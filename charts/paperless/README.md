@@ -7,6 +7,8 @@ Helm Chart to install paperless-ngx along with Tika and Gotenberg
 Please note that this chart is still relatively new and not all features/values have been tested.
 If you encounter any issues/bugs, feel free to file an issue/PR!
 
+**Homepage:** <https://github.com/spacebird-dev/charts>
+
 ## Installation
 
 To install this chart directly, use:
@@ -47,8 +49,8 @@ And then install the chart from the repository reference:
 | db.external.type | string | `""` | If not empty, will skip db installation and use an external database instead. Accepted values are "" (managed install), "mariadb" and "postgresql" |
 | db.external.user.existingSecret | object | `{}` |  |
 | db.external.user.name | string | `""` | Remote DB username |
-| db.mariadb.enabled | bool | `false` | Install a mariadb database instead of SQLite. If enabled, you must not use another bundled/external DB |
-| db.postgres.enabled | bool | `false` | Install a postgresql database instead of SQLite. If enabled, you must not use another bundled/external DB |
+| db.mariadb.enabled | bool | `false` | Install a bundled mariadb database instead of SQLite. If enabled, you must not use another bundled/external DB |
+| db.postgres.enabled | bool | `false` | Install a bundled postgresql database instead of SQLite. If enabled, you must not use another bundled/external DB |
 | db.sqlite.enabled | bool | `true` | Use the integrated sqlite database, enabled by default The database is stored in the data PVC If disabled, you must use another bundled/external DB |
 | fullnameOverride | string | `""` |  |
 | gotenberg.bundled.enabled | bool | `true` | Use the bundled gotenberg install. Ignored if `external.endpoint` is set |
@@ -60,7 +62,7 @@ And then install the chart from the repository reference:
 | ingress.hosts[0].paths[0].path | string | `"/"` |  |
 | ingress.hosts[0].paths[0].pathType | string | `"ImplementationSpecific"` |  |
 | ingress.tls | list | `[]` |  |
-| mariadb | object | `{"auth":{"database":"paperless","password":"paperless","username":"paperless"}}` | Default credentials for the bundled mariadb DB |
+| mariadb | object | `{"auth":{"database":"paperless","password":"paperless","username":"paperless"},"primary":{"service":{"ports":{"mysql":3306}}}}` | Default credentials for the bundled mariadb DB |
 | nameOverride | string | `""` |  |
 | paperless.admin.email.address | string | `"admin@exmaple.com"` | Email of the admin user |
 | paperless.admin.email.existingSecret | object | `{}` |  |
@@ -108,25 +110,31 @@ And then install the chart from the repository reference:
 | paperless.tolerations | list | `[]` |  |
 | paperless.tz | string | `"UTC"` | Paperless server Timezone |
 | paperless.url | string | `"https://paperless-ngx.example.com"` |  |
-| paperless.volumes.consumption.existingVolume | object | `{}` | Specify a volume to mount as the consumption directory. If left unspecified, the consumption directory will not be exposed, so uploads will only be possible via the API/WebUI |
 | paperless.volumes.consumption.mountPath | string | `"/usr/src/paperless/consume"` |  |
-| paperless.volumes.data.existingVolume | object | `{}` | Use an existing volume for data persistence instead of the auto-generated PV. |
+| paperless.volumes.consumption.persistence.accessMode | string | `"ReadWriteOnce"` |  |
+| paperless.volumes.consumption.persistence.enabled | bool | `true` | Enable PV/PVC creation for the consumption directory containing incoming documents. If disabled, the consumption directory will not be exposed, so uploads will only be possible via the API/WebUI |
+| paperless.volumes.consumption.persistence.size | string | `"5Gi"` |  |
+| paperless.volumes.consumption.persistence.storageClass | string | `""` |  |
+| paperless.volumes.consumption.persistence.volumeName | string | `""` | - Optionally specify an existing PV to bind to, instead of creating a new one on install. |
 | paperless.volumes.data.mountPath | string | `"/usr/src/paperless/data"` |  |
 | paperless.volumes.data.persistence.accessMode | string | `"ReadWriteOnce"` |  |
-| paperless.volumes.data.persistence.annotations | object | `{}` |  |
-| paperless.volumes.data.persistence.enabled | bool | `true` | Enable persistence for the data directory containing paperless application data. Disable for an ephemeral install. Ignored if `existingVolume` is specified |
+| paperless.volumes.data.persistence.enabled | bool | `true` | Enable persistence for the data directory containing paperless application data. Disable for an ephemeral install. |
 | paperless.volumes.data.persistence.size | string | `"5Gi"` |  |
 | paperless.volumes.data.persistence.storageClass | string | `""` |  |
-| paperless.volumes.export.existingVolume | object | `{}` | Specify a volume to mount for exporting data from paperless. If left unspecified, there will be no exposed export path |
+| paperless.volumes.data.persistence.volumeName | string | `""` | - Optionally specify an existing PV to bind to, instead of creating a new one on install |
 | paperless.volumes.export.mountPath | string | `"/usr/src/paperless/export"` |  |
-| paperless.volumes.media.existingVolume | object | `{}` | Use an existing volume for media persistence instead of the included pvc. |
+| paperless.volumes.export.persistence.accessMode | string | `"ReadWriteOnce"` |  |
+| paperless.volumes.export.persistence.enabled | bool | `true` | Enable PV/PVC creation for the export directory containing exported data. If disabled, there will be no exposed export directory |
+| paperless.volumes.export.persistence.size | string | `"5Gi"` |  |
+| paperless.volumes.export.persistence.storageClass | string | `""` |  |
+| paperless.volumes.export.persistence.volumeName | string | `""` | - Optionally specify an existing PV to bind to, instead of creating a new one on install. |
 | paperless.volumes.media.mountPath | string | `"/usr/src/paperless/media"` |  |
 | paperless.volumes.media.persistence.accessMode | string | `"ReadWriteOnce"` |  |
-| paperless.volumes.media.persistence.annotations | object | `{}` |  |
-| paperless.volumes.media.persistence.enabled | bool | `true` | Enable persistence for the media directory containing processed documents. Disable for an ephemeral install. Ignored if `existingVolume` is specified |
+| paperless.volumes.media.persistence.enabled | bool | `true` | Enable persistence for the media directory containing processed documents. Disable for an ephemeral install. |
 | paperless.volumes.media.persistence.size | string | `"5Gi"` |  |
 | paperless.volumes.media.persistence.storageClass | string | `""` |  |
-| postgresql | object | `{"auth":{"database":"paperless","password":"paperless","username":"paperless"}}` | Default credentials for the bundled postgres DB |
+| paperless.volumes.media.persistence.volumeName | string | `""` | - Optionally specify an existing PV to bind to, instead of creating a new one on install |
+| postgresql | object | `{"auth":{"database":"paperless","password":"paperless","username":"paperless"},"primary":{"service":{"ports":{"postgresql":5432}}}}` | Default credentials for the bundled postgres DB |
 | redis.architecture | string | `"standalone"` | Architecture of the managed redis instance. Defaults to single-node master operation. Note that changing this value is untested and may have undesirable results. |
 | redis.auth.enabled | bool | `true` |  |
 | redis.auth.password | string | `"paperless"` | Password for the bundled redis service |

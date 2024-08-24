@@ -1,0 +1,8 @@
+chart-repos:
+  - bitnami=https://charts.bitnami.com/bitnami
+  - tika=https://apache.jfrog.io/artifactory/tika
+  - gotenberg=https://maikumori.github.io/helm-charts
+validate-maintainers: false
+remote: origin
+target-branch: main
+check-version-increment: false

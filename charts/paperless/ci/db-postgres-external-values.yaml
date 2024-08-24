@@ -1,0 +1,20 @@
+paperless:
+  url: "https://nonexistent.tld"
+  secretKey:
+    value: s3fkNVYv8BrZfoPH10UWxEViPhCzf4dP
+  admin:
+    enabled: true
+    password:
+      value: kwWTQLSXxF42JEns3wHItXpVfzKPC9Jh
+
+db:
+  external:
+    type: postgresql
+    host:
+      name: db
+    database:
+      name: paperless
+    user:
+      name: paperless
+    password:
+      value: qX1GAPE3BBwUquyYurxVT1OpL8ZWHLX7

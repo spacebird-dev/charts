@@ -93,55 +93,50 @@ paperless:
   #  PAPERLESS_CONSUMER_POLLING: 30
 
   volumes:
-    consumption:
-      mountPath: /usr/src/paperless/consume
-      # -- Specify a volume to mount as the consumption directory.
-      # If left unspecified, the consumption directory will not be exposed,
-      # so uploads will only be possible via the API/WebUI
-      existingVolume: {}
-      #  nfs:
-      #    server: my-server.example.com
-      #    path: /mnt/nfs/paperless/consumption
     data:
       mountPath: /usr/src/paperless/data
       persistence:
         # -- Enable persistence for the data directory containing paperless application data.
         # Disable for an ephemeral install.
-        # Ignored if `existingVolume` is specified
         enabled: true
-        annotations: {}
+        # --- Optionally specify an existing PV to bind to, instead of creating a new one on install
+        volumeName: ""
         storageClass: ""
         accessMode: ReadWriteOnce
         size: 5Gi
-      # -- Use an existing volume for data persistence instead of the auto-generated PV.
-      existingVolume: {}
-      #  nfs:
-      #    server: my-server.example.com
-      #    path: /mnt/nfs/paperless/data
     media:
       mountPath: /usr/src/paperless/media
       persistence:
         # -- Enable persistence for the media directory containing processed documents.
         # Disable for an ephemeral install.
-        # Ignored if `existingVolume` is specified
         enabled: true
-        annotations: {}
+        # --- Optionally specify an existing PV to bind to, instead of creating a new one on install
+        volumeName: ""
         storageClass: ""
         accessMode: ReadWriteOnce
         size: 5Gi
-      # -- Use an existing volume for media persistence instead of the included pvc.
-      existingVolume: {}
-      #  nfs:
-      #    server: my-server.example.com
-      #    path: /mnt/nfs/paperless/media
+    consumption:
+      mountPath: /usr/src/paperless/consume
+      persistence:
+        # -- Enable PV/PVC creation for the consumption directory containing incoming documents.
+        # If disabled, the consumption directory will not be exposed, so uploads will only be possible via the API/WebUI
+        enabled: true
+        # --- Optionally specify an existing PV to bind to, instead of creating a new one on install.
+        volumeName: ""
+        storageClass: ""
+        accessMode: ReadWriteOnce
+        size: 5Gi
     export:
       mountPath: /usr/src/paperless/export
-      # -- Specify a volume to mount for exporting data from paperless.
-      # If left unspecified, there will be no exposed export path
-      existingVolume: {}
-      #  nfs:
-      #    server: my-server.example.com
-      #    path: /mnt/nfs/paperless/export
+      persistence:
+        # -- Enable PV/PVC creation for the export directory containing exported data.
+        # If disabled, there will be no exposed export directory
+        enabled: true
+        # --- Optionally specify an existing PV to bind to, instead of creating a new one on install.
+        volumeName: ""
+        storageClass: ""
+        accessMode: ReadWriteOnce
+        size: 5Gi
 
   extraVolumes: []
   # - name: consumption
@@ -246,11 +241,11 @@ db:
     # If disabled, you must use another bundled/external DB
     enabled: true
   postgres:
-    # -- Install a postgresql database instead of SQLite.
+    # -- Install a bundled postgresql database instead of SQLite.
     # If enabled, you must not use another bundled/external DB
     enabled: false
   mariadb:
-    # -- Install a mariadb database instead of SQLite.
+    # -- Install a bundled mariadb database instead of SQLite.
     # If enabled, you must not use another bundled/external DB
     enabled: false
   external:
@@ -314,9 +309,17 @@ postgresql:
     username: paperless
     database: paperless
     password: paperless
+  primary:
+    service:
+      ports:
+        postgresql: 5432
 # -- Default credentials for the bundled mariadb DB
 mariadb:
   auth:
     username: paperless
     database: paperless
     password: paperless
+  primary:
+    service:
+      ports:
+        mysql: 3306

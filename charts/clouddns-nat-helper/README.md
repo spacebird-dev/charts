@@ -4,6 +4,8 @@
 
 A utility to automatically generate Ipv4 A DNS records for hosts based on existing AAAA records in a DNS zone.
 
+**Homepage:** <https://github.com/spacebird-dev/charts>
+
 ## Installation
 
 To install this chart directly, use:

@@ -1,5 +1,6 @@
 apiVersion: v2
 appVersion: 0.1.1
+home: https://github.com/spacebird-dev/charts
 description: Dynamic Ipv6 Prefix support for MetalLB
 name: metallb-dyn6
 type: application

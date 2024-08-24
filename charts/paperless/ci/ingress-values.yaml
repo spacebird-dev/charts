@@ -1,0 +1,20 @@
+paperless:
+  url: "https://paperless.invalid.tld"
+  secretKey:
+    value: s3fkNVYv8BrZfoPH10UWxEViPhCzf4dP
+  admin:
+    enabled: true
+    password:
+      value: kwWTQLSXxF42JEns3wHItXpVfzKPC9Jh
+
+ingress:
+  enabled: true
+  hosts:
+    - host: paperless.invalid.tld
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls:
+    - secretName: paperless-tls
+      hosts:
+        - paperless.invalid.tld
