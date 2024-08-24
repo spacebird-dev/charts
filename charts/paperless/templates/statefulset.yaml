@@ -256,7 +256,7 @@ spec:
         accessModes:
           - {{ .Values.paperless.volumes.data.persistence.accessMode | quote }}
         resources:
-            requests:
+          requests:
             storage: {{ .Values.paperless.volumes.data.persistence.size | quote }}
         {{- if .Values.paperless.volumes.data.persistence.storageClass }}
         storageClassName: {{ .Values.paperless.volumes.data.persistence.storageClass | quote }}
@@ -272,7 +272,7 @@ spec:
         accessModes:
           - {{ .Values.paperless.volumes.media.persistence.accessMode | quote }}
         resources:
-            requests:
+          requests:
             storage: {{ .Values.paperless.volumes.media.persistence.size | quote }}
         {{- if .Values.paperless.volumes.media.persistence.storageClass }}
         storageClassName: {{ .Values.paperless.volumes.media.persistence.storageClass | quote }}
@@ -288,7 +288,7 @@ spec:
         accessModes:
           - {{ .Values.paperless.volumes.media.persistence.accessMode | quote }}
         resources:
-            requests:
+          requests:
             storage: {{ .Values.paperless.volumes.media.persistence.size | quote }}
         {{- if .Values.paperless.volumes.media.persistence.storageClass }}
         storageClassName: {{ .Values.paperless.volumes.media.persistence.storageClass | quote }}
@@ -304,7 +304,7 @@ spec:
         accessModes:
           - {{ .Values.paperless.volumes.export.persistence.peraccessMode | quote }}
         resources:
-            requests:
+          requests:
             storage: {{ .Values.paperless.volumes.export.persistence.size | quote }}
         {{- if .Values.paperless.volumes.export.persistence.storageClass }}
         storageClassName: {{ .Values.paperless.volumes.export.persistence.storageClass | quote }}
