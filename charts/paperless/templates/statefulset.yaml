@@ -1,5 +1,5 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: {{ include "paperless.fullname" . }}
   labels:
@@ -168,20 +168,20 @@ spec:
               mountPath: /etc/ssl/paperless-client-key/
               readOnly: true
           {{- end }}
-          {{- if .Values.paperless.volumes.consumption.existingVolume }}
-            - name: consumption
-              mountPath: {{ .Values.paperless.volumes.consumption.mountPath }}
-          {{- end }}
-          {{- if or .Values.paperless.volumes.data.existingVolume .Values.paperless.volumes.data.persistence.enabled }}
-            - name: data
+          {{- if .Values.paperless.volumes.data.persistence.enabled }}
+            - name: {{ include "paperless.fullname" . }}-data
               mountPath: {{ .Values.paperless.volumes.data.mountPath }}
           {{- end }}
-          {{- if or .Values.paperless.volumes.media.existingVolume .Values.paperless.volumes.media.persistence.enabled }}
-            - name: media
+          {{- if .Values.paperless.volumes.media.persistence.enabled }}
+            - name: {{ include "paperless.fullname" . }}-media
               mountPath: {{ .Values.paperless.volumes.media.mountPath }}
           {{- end }}
-          {{- if .Values.paperless.volumes.export.existingVolume }}
-            - name: export
+          {{- if .Values.paperless.volumes.consumption.persistence.enabled }}
+            - name: {{ include "paperless.fullname" . }}-consumption
+              mountPath: {{ .Values.paperless.volumes.consumption.mountPath }}
+          {{- end }}
+          {{- if .Values.paperless.volumes.export.persistence.enabled }}
+            - name: {{ include "paperless.fullname" . }}-export
               mountPath: {{ .Values.paperless.volumes.export.mountPath }}
           {{- end }}
           {{- with .Values.extraVolumeMounts }}
@@ -233,38 +233,6 @@ spec:
               - key: client-key
                 path: key
       {{- end }}
-      {{- if .Values.paperless.volumes.consumption.existingVolume }}
-      {{- with .Values.paperless.volumes.consumption.existingVolume }}
-        - name: consumption
-          {{- toYaml . | nindent 10 }}
-      {{- end }}
-      {{- end }}
-      {{- if .Values.paperless.volumes.data.existingVolume }}
-      {{- with .Values.paperless.volumes.data.existingVolume }}
-        - name: data
-          {{- toYaml . | nindent 10 }}
-      {{- end }}
-      {{- else if .Values.paperless.volumes.data.persistence.enabled }}
-        - name: data
-          persistentVolumeClaim:
-            claimName: {{ include "paperless.fullname" . }}-data
-      {{- end }}
-      {{- if .Values.paperless.volumes.media.existingVolume }}
-      {{- with .Values.paperless.volumes.media.existingVolume }}
-        - name: media
-          {{- toYaml . | nindent 10 }}
-      {{- end }}
-      {{- else if .Values.paperless.volumes.media.persistence.enabled }}
-        - name: media
-          persistentVolumeClaim:
-            claimName: {{ include "paperless.fullname" . }}-media
-      {{- end }}
-      {{- if .Values.paperless.volumes.export.existingVolume }}
-        - name: export
-      {{- with .Values.paperless.volumes.export.existingVolume }}
-          {{- toYaml . | nindent 10 }}
-      {{- end }}
-      {{- end }}
       {{- with .Values.paperless.extraVolumes }}
         {{- toYaml . | nindent 8 }}
       {{- end }}
@@ -280,3 +248,68 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+  volumeClaimTemplates:
+    {{- if and .Values.paperless.volumes.data.persistence.enabled }}
+    - metadata:
+        name: {{ include "paperless.fullname" . }}-data
+      spec:
+        accessModes:
+          - {{ .Values.paperless.volumes.data.persistence.accessMode | quote }}
+        resources:
+            requests:
+            storage: {{ .Values.paperless.volumes.data.persistence.size | quote }}
+        {{- if .Values.paperless.volumes.data.persistence.storageClass }}
+        storageClassName: {{ .Values.paperless.volumes.data.persistence.storageClass | quote }}
+        {{- end }}
+        {{- if .Values.paperless.volumes.data.persistence.volumeName }}
+        volumeName: {{ .Values.paperless.volumes.data.persistence.volumeName | quote }}
+        {{- end }}
+    {{- end }}
+    {{- if and .Values.paperless.volumes.media.persistence.enabled }}
+    - metadata:
+        name: {{ include "paperless.fullname" . }}-media
+      spec:
+        accessModes:
+          - {{ .Values.paperless.volumes.media.persistence.accessMode | quote }}
+        resources:
+            requests:
+            storage: {{ .Values.paperless.volumes.media.persistence.size | quote }}
+        {{- if .Values.paperless.volumes.media.persistence.storageClass }}
+        storageClassName: {{ .Values.paperless.volumes.media.persistence.storageClass | quote }}
+        {{- end }}
+        {{- if .Values.paperless.volumes.media.persistence.volumeName }}
+        volumeName: {{ .Values.paperless.volumes.media.persistence.volumeName | quote }}
+        {{- end }}
+    {{- end }}
+    {{- if and .Values.paperless.volumes.consumption.persistence.enabled }}
+    - metadata:
+        name: {{ include "paperless.fullname" . }}-consumption
+      spec:
+        accessModes:
+          - {{ .Values.paperless.volumes.media.persistence.accessMode | quote }}
+        resources:
+            requests:
+            storage: {{ .Values.paperless.volumes.media.persistence.size | quote }}
+        {{- if .Values.paperless.volumes.media.persistence.storageClass }}
+        storageClassName: {{ .Values.paperless.volumes.media.persistence.storageClass | quote }}
+        {{- end }}
+        {{- if .Values.paperless.volumes.media.persistence.volumeName }}
+        volumeName: {{ .Values.paperless.volumes.media.persistence.volumeName | quote }}
+        {{- end }}
+    {{- end }}
+    {{- if and .Values.paperless.volumes.export.persistence.enabled }}
+    - metadata:
+        name: {{ include "paperless.fullname" . }}-export
+      spec:
+        accessModes:
+          - {{ .Values.paperless.volumes.export.persistence.peraccessMode | quote }}
+        resources:
+            requests:
+            storage: {{ .Values.paperless.volumes.export.persistence.size | quote }}
+        {{- if .Values.paperless.volumes.export.persistence.storageClass }}
+        storageClassName: {{ .Values.paperless.volumes.export.persistence.storageClass | quote }}
+        {{- end }}
+        {{- if .Values.paperless.volumes.export.persistence.volumeName }}
+        volumeName: {{ .Values.paperless.volumes.export.persistence.volumeName | quote }}
+        {{- end }}
+    {{- end }}
