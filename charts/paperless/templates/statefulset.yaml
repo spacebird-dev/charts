@@ -286,15 +286,15 @@ spec:
         name: {{ include "paperless.fullname" . }}-consumption
       spec:
         accessModes:
-          - {{ .Values.paperless.volumes.media.persistence.accessMode | quote }}
+          - {{ .Values.paperless.volumes.consumption.persistence.accessMode | quote }}
         resources:
           requests:
-            storage: {{ .Values.paperless.volumes.media.persistence.size | quote }}
-        {{- if .Values.paperless.volumes.media.persistence.storageClass }}
-        storageClassName: {{ .Values.paperless.volumes.media.persistence.storageClass | quote }}
+            storage: {{ .Values.paperless.volumes.consumption.persistence.size | quote }}
+        {{- if .Values.paperless.volumes.consumption.persistence.storageClass }}
+        storageClassName: {{ .Values.paperless.volumes.consumption.persistence.storageClass | quote }}
         {{- end }}
-        {{- if .Values.paperless.volumes.media.persistence.volumeName }}
-        volumeName: {{ .Values.paperless.volumes.media.persistence.volumeName | quote }}
+        {{- if .Values.paperless.volumes.consumption.persistence.volumeName }}
+        volumeName: {{ .Values.paperless.volumes.consumption.persistence.volumeName | quote }}
         {{- end }}
     {{- end }}
     {{- if and .Values.paperless.volumes.export.persistence.enabled }}
