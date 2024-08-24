@@ -302,7 +302,7 @@ spec:
         name: {{ include "paperless.fullname" . }}-export
       spec:
         accessModes:
-          - {{ .Values.paperless.volumes.export.persistence.peraccessMode | quote }}
+          - {{ .Values.paperless.volumes.export.persistence.accessMode | quote }}
         resources:
           requests:
             storage: {{ .Values.paperless.volumes.export.persistence.size | quote }}
