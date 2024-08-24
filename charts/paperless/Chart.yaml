@@ -6,6 +6,10 @@ dependencies:
     name: redis
     repository: oci://registry-1.docker.io/bitnamicharts
     version: 19.6.4
+  - condition: mariadb.bundled.enabled
+    name: mariadb
+    repository: oci://registry-1.docker.io/bitnamicharts
+    version: 19.0.4
   - condition: tika.bundled.enabled
     name: tika
     repository: https://apache.jfrog.io/artifactory/tika

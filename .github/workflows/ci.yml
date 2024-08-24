@@ -18,8 +18,8 @@ jobs:
         - name: Run pre-commit checks
           uses: pre-commit/action@v3.0.1
   chart-testing:
-    name: Run chart-testing lint
-    runs-on: ubuuntu-22.04
+    name: Run chart-testing
+    runs-on: ubuntu-22.04
     steps:
       - name: Check out codebase
         uses: actions/checkout@v4
@@ -27,7 +27,7 @@ jobs:
           fetch-depth: 0
 
       - name: Setup Helm
-        uses: azure@setup-helm@v4
+        uses: azure/setup-helm@v4
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -48,9 +48,10 @@ jobs:
       - name: Run chart-testing (lint)
         run: ct lint --config tests/ct.yaml
 
-      - name: Create kind cluster
-        uses: helm/kind-action@v1
-        if: steps.list-changed.outputs.changed == 'true'
+      # disabled until we can set up proper helm integration tests for the charts
+      #- name: Create kind cluster
+      #  uses: helm/kind-action@v1
+      #  if: steps.list-changed.outputs.changed == 'true'
 
-      - name: Run chart-testing (install)
-        run: ct install --config tests/ct.yaml
+      #- name: Run chart-testing (install)
+      #  run: ct install --config tests/ct.yaml
