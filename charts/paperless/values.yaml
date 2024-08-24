@@ -241,11 +241,11 @@ db:
     # If disabled, you must use another bundled/external DB
     enabled: true
   postgres:
-    # -- Install a postgresql database instead of SQLite.
+    # -- Install a bundled postgresql database instead of SQLite.
     # If enabled, you must not use another bundled/external DB
     enabled: false
   mariadb:
-    # -- Install a mariadb database instead of SQLite.
+    # -- Install a bundled mariadb database instead of SQLite.
     # If enabled, you must not use another bundled/external DB
     enabled: false
   external:
@@ -309,9 +309,17 @@ postgresql:
     username: paperless
     database: paperless
     password: paperless
+  primary:
+    service:
+      ports:
+        postgresql: 5432
 # -- Default credentials for the bundled mariadb DB
 mariadb:
   auth:
     username: paperless
     database: paperless
     password: paperless
+  primary:
+    service:
+      ports:
+        mysql: 3306

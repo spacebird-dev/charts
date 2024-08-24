@@ -1,15 +1,18 @@
 dependencies:
-- name: redis
-  repository: oci://registry-1.docker.io/bitnamicharts
-  version: 19.6.4
-- name: tika
-  repository: https://apache.jfrog.io/artifactory/tika
-  version: 2.9.0
-- name: postgresql
-  repository: oci://registry-1.docker.io/bitnamicharts
-  version: 15.5.24
-- name: gotenberg
-  repository: https://maikumori.github.io/helm-charts
-  version: 1.6.0
-digest: sha256:fdfada540f1da9d2f66d46916042712642ef3ee20354234051fbea90aa93b08e
-generated: "2024-08-24T01:29:55.131056187Z"
+  - name: redis
+    repository: oci://registry-1.docker.io/bitnamicharts
+    version: 19.6.4
+  - name: tika
+    repository: https://apache.jfrog.io/artifactory/tika
+    version: 2.9.0
+  - name: postgresql
+    repository: oci://registry-1.docker.io/bitnamicharts
+    version: 15.5.24
+  - name: mariadb
+    repository: oci://registry-1.docker.io/bitnamicharts
+    version: 19.0.4
+  - name: gotenberg
+    repository: https://maikumori.github.io/helm-charts
+    version: 1.6.0
+digest: sha256:d50f2e1af27e4470d37578562534662347a6fbe27869e6ca1d05c503fb90cea0
+generated: "2024-08-06T00:26:55.750864707Z"
