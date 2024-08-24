@@ -1,0 +1,8 @@
+paperless:
+  url: "https://nonexistent.tld"
+  secretKey:
+    value: s3fkNVYv8BrZfoPH10UWxEViPhCzf4dP
+  admin:
+    enabled: true
+    password:
+      value: kwWTQLSXxF42JEns3wHItXpVfzKPC9Jh

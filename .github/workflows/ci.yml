@@ -6,8 +6,8 @@ on:
   workflow_dispatch:
 
 jobs:
-  lint:
-    name: Lint
+  pre-commit:
+    name: Run pre-commit
     runs-on: ubuntu-22.04
     steps:
         - name: Check out codebase
@@ -17,3 +17,40 @@ jobs:
 
         - name: Run pre-commit checks
           uses: pre-commit/action@v3.0.1
+  chart-testing:
+    name: Run chart-testing lint
+    runs-on: ubuuntu-22.04
+    steps:
+      - name: Check out codebase
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Helm
+        uses: azure@setup-helm@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.12
+
+      - name: Set up chart-testing
+        uses: helm/chart-testing-action@v2
+
+      - name: Look for changed charts
+        id: list-changed
+        run: |
+          changed=$(ct list-changed --config tests/ct.yaml)
+          if [[ -n "$changed" ]]; then
+            echo "changed=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Run chart-testing (lint)
+        run: ct lint --config tests/ct.yaml
+
+      - name: Create kind cluster
+        uses: helm/kind-action@v1
+        if: steps.list-changed.outputs.changed == 'true'
+
+      - name: Run chart-testing (install)
+        run: ct install --config tests/ct.yaml
