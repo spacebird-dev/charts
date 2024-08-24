@@ -4,6 +4,8 @@
 
 Dynamic Ipv6 Prefix support for MetalLB
 
+**Homepage:** <https://github.com/spacebird-dev/charts>
+
 ## Installation
 
 To install this chart directly, use:
