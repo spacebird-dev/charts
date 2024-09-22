@@ -6,4 +6,4 @@ name: metallb-dyn6
 sources:
 - https://github.com/spacebird-dev/metallb-dyn6
 type: application
-version: 0.1.2
+version: 0.2.0
