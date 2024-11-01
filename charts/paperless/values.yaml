@@ -171,11 +171,17 @@ paperless:
   livenessProbe:
     httpGet:
       path: /
-      port: http
+      port: 8000
   readinessProbe:
-    httpGet:
-      path: /
-      port: http
+    # -- Enable a custom Readiness Probe. By default, a readiness Probe to /api/status/ will be enabled if a default admin user is enabled.
+    custom:
+      {}
+      # httpGet:
+      #   path: /api/status/
+      #   httpHeaders:
+      #     - name: Authorization
+      #       value: Token/Basic: "secret"
+      #   port: 8000
 
 service:
   # -- How to expose paperless to the k8s cluster. If you want to configure external access, use the `ingress` configuration instead.

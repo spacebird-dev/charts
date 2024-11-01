@@ -147,9 +147,20 @@ spec:
               containerPort: {{ .Values.service.port }}
               protocol: TCP
           livenessProbe:
-            {{- toYaml .Values.livenessProbe | nindent 12 }}
+            {{- toYaml .Values.paperless.livenessProbe | nindent 12 }}
+          {{- if .Values.paperless.readinessProbe.custom }}
           readinessProbe:
-            {{- toYaml .Values.readinessProbe | nindent 12 }}
+            {{- toYaml .Values.paperless.readinessProbe.custom | nindent 12 }}
+          {{- else if .Values.paperless.admin.enabled }}
+          readinessProbe:
+            exec:
+              command:
+                - "curl"
+                - "-u $PAPERLESS_ADMIN_USER:$PAPERLESS_ADMIN_PASSWORD"
+                - "http://localhost:8000/api/status/"
+            periodSeconds: 30
+            timeoutSeconds: 10
+          {{- end }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           volumeMounts:
