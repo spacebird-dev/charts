@@ -20,7 +20,7 @@ dependencies:
 - condition: gotenberg.enabled
   name: gotenberg
   repository: https://maikumori.github.io/helm-charts
-  version: 1.7.0
+  version: 1.9.0
 description: Helm Chart to install paperless-ngx along with Tika and Gotenberg
 home: https://github.com/spacebird-dev/charts
 name: paperless
