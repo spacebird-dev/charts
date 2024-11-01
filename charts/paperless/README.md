@@ -81,7 +81,7 @@ And then install the chart from the repository reference:
 | paperless.image.tag | string | `""` | Overrides the image tag whose default is the chart appVersion. |
 | paperless.imagePullSecrets | list | `[]` |  |
 | paperless.livenessProbe.httpGet.path | string | `"/"` |  |
-| paperless.livenessProbe.httpGet.port | string | `"http"` |  |
+| paperless.livenessProbe.httpGet.port | int | `8000` |  |
 | paperless.nodeSelector | object | `{}` |  |
 | paperless.ocr.defaultLanguage | string | `"eng"` | OCR default language. See https://packages.debian.org/search?keywords=tesseract-ocr-&searchon=names&suite=buster |
 | paperless.ocr.extraLanguages | string | `"deu fra"` | OCR extra languages. |
@@ -89,8 +89,7 @@ And then install the chart from the repository reference:
 | paperless.podAnnotations | object | `{}` |  |
 | paperless.podLabels | object | `{}` |  |
 | paperless.podSecurityContext.fsGroup | int | `1000` |  |
-| paperless.readinessProbe.httpGet.path | string | `"/"` |  |
-| paperless.readinessProbe.httpGet.port | string | `"http"` |  |
+| paperless.readinessProbe.custom | object | `{}` | Enable a custom Readiness Probe. By default, a readiness Probe to /api/status/ will be enabled if a default admin user is enabled. |
 | paperless.replicaCount | int | `1` | Number of deployment replicas. Note that the paperless container is not ready for multi-replica deployments |
 | paperless.resources | object | `{}` |  |
 | paperless.secretKey.existingSecret | object | `{}` |  |
