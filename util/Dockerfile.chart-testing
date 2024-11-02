@@ -1,0 +1,12 @@
+# Temporary workaround to get Helm 3.16 in the chart-testing container
+ARG CHART_TESTING_DOCKER_TAG
+FROM quay.io/helmpack/chart-testing:${CHART_TESTING_DOCKER_TAG}
+
+# Install Helm
+ARG helm_version=v3.16.2
+RUN curl -LO "https://get.helm.sh/helm-$helm_version-linux-amd64.tar.gz" \
+    && mkdir -p "/usr/local/helm-$helm_version" \
+    && tar -xzf "helm-$helm_version-linux-amd64.tar.gz" -C "/usr/local/helm-$helm_version" \
+    && rm  "/usr/local/bin/helm" \
+    && ln -s "/usr/local/helm-$helm_version/linux-amd64/helm" /usr/local/bin/helm \
+    && rm -f "helm-$helm_version-linux-amd64.tar.gz"
