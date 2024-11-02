@@ -155,9 +155,9 @@ spec:
           readinessProbe:
             exec:
               command:
-                - "curl"
-                - "-u $PAPERLESS_ADMIN_USER:$PAPERLESS_ADMIN_PASSWORD"
-                - "http://localhost:8000/api/status/"
+                - "bash"
+                - "-c"
+                - "curl -u $PAPERLESS_ADMIN_USER:$PAPERLESS_ADMIN_PASSWORD http://localhost:8000/api/status/"
             periodSeconds: 30
             timeoutSeconds: 10
           {{- end }}
