@@ -4,7 +4,7 @@ dependencies:
   version: 20.6.0
 - name: mariadb
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 19.1.2
+  version: 20.2.1
 - name: tika
   repository: https://apache.jfrog.io/artifactory/tika
   version: 2.9.0
@@ -14,5 +14,5 @@ dependencies:
 - name: gotenberg
   repository: https://maikumori.github.io/helm-charts
   version: 1.7.0
-digest: sha256:2285660a63368755b1619ad9304a19f4d4ebf7d0bc96b0f027594083d7122526
-generated: "2024-12-18T05:26:25.839433919Z"
+digest: sha256:2ae0a0fd6c936b76e364337f0101f4dd4f44b8340e7450a3707e647ca3f18685
+generated: "2024-12-18T08:30:35.762080322Z"
