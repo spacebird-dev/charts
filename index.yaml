@@ -2,6 +2,23 @@ apiVersion: v1
 entries:
   clouddns-nat-helper:
   - apiVersion: v2
+    appVersion: 0.2.15
+    created: "2025-01-29T13:49:01.137833408Z"
+    description: A utility to automatically generate Ipv4 A DNS records for hosts
+      based on existing AAAA records in a DNS zone.
+    digest: 0a2100bd4b98ef03c3f92cdab49ac949956733a0bba1f6f9ffc6a0ad395ed70d
+    home: https://github.com/spacebird-dev/charts
+    maintainers:
+    - email: github@maxhoesel.de
+      name: Max Hösel
+    name: clouddns-nat-helper
+    sources:
+    - https://github.com/spacebird-dev/clouddns-nat-helper
+    type: application
+    urls:
+    - https://github.com/spacebird-dev/charts/releases/download/clouddns-nat-helper-0.3.0/clouddns-nat-helper-0.3.0.tgz
+    version: 0.3.0
+  - apiVersion: v2
     appVersion: 0.2.14
     created: "2024-08-18T03:02:39.321717876Z"
     description: A utility to automatically generate Ipv4 A DNS records for hosts
@@ -420,4 +437,4 @@ entries:
     urls:
     - https://github.com/spacebird-dev/charts/releases/download/paperless-0.1.3/paperless-0.1.3.tgz
     version: 0.1.3
-generated: "2024-11-02T01:19:49.461406705Z"
+generated: "2025-01-29T13:49:01.137889823Z"
