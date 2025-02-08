@@ -1,6 +1,6 @@
 # clouddns-nat-helper
 
-![Version: 0.3.2](https://img.shields.io/badge/Version-0.3.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.2.17](https://img.shields.io/badge/AppVersion-0.2.17-informational?style=flat-square)
+![Version: 0.3.2](https://img.shields.io/badge/Version-0.3.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.2.18](https://img.shields.io/badge/AppVersion-0.2.18-informational?style=flat-square)
 
 A utility to automatically generate Ipv4 A DNS records for hosts based on existing AAAA records in a DNS zone.
 
