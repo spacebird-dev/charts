@@ -11,5 +11,5 @@ Alternatively, you can also add the repository like so:
 
 And then install the chart from the repository reference:
 
-`helm install spacebird/my-{{ template "chart.name" . }} {{ template "chart.name" . }}`
+`helm install spacebird/{{ template "chart.name" . }} my-{{ template "chart.name" . }}`
 {{- end -}}
