@@ -21,7 +21,7 @@ Alternatively, you can also add the repository like so:
 
 And then install the chart from the repository reference:
 
-`helm install spacebird/my-paperless paperless`
+`helm install spacebird/paperless my-paperless`
 
 ## Source Code
 

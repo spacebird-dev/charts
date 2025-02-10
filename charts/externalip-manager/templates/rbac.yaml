@@ -1,0 +1,54 @@
+{{- if .Values.rbac.enable }}
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ include "externalip-manager.serviceAccountName" . }}
+  labels:
+    {{- include "externalip-manager.labels" . | nindent 4 }}
+  {{- with .Values.serviceAccount.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ include "externalip-manager.clusterRoleName" . }}
+  labels:
+    {{- include "externalip-manager.labels" . | nindent 4 }}
+  {{- with .Values.clusterRole.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+rules:
+- apiGroups: [""]
+  resources: ["services"]
+  verbs: ["get", "list", "watch", "update", "patch"]
+- apiGroups: ["events.k8s.io"]
+  resources: ["events"]
+  verbs: ["create", "list", "patch", "update"]
+- apiGroups: ["externalip.spacebird.dev"]
+  resources: ["*"]
+  verbs: ["get", "list", "watch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: {{ include "externalip-manager.clusterRoleBindingName" . }}
+  labels:
+    {{- include "externalip-manager.labels" . | nindent 4 }}
+  {{- with .Values.clusterRoleBinding.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+subjects:
+  - kind: ServiceAccount
+    name: {{ include "externalip-manager.serviceAccountName" . }}
+    namespace: {{ .Release.Namespace }}
+    apiGroup: ""
+roleRef:
+  kind: ClusterRole
+  name: {{ include "externalip-manager.clusterRoleName" . }}
+  apiGroup: rbac.authorization.k8s.io
+{{- end }}

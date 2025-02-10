@@ -1,0 +1,59 @@
+image:
+  repository: ghcr.io/spacebird-dev/externalip-manager
+  pullPolicy: IfNotPresent
+  tag: ""
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+# --Application loglevel. Can be error,warning,info,debug,trace
+loglevel: info
+
+manager:
+  # --Time to wait between reconciliation runs, in seconds
+  interval: 60
+
+crds:
+  # --Install the CRDs used by externalip-manager. Disable if you are installing CRDs manually.
+  enable: true
+
+rbac:
+  # --Install the (Cluster)Roles and Bindings needed to operate externalip-manager.
+  # If you want to manage RBAC manually, disable this and set .serviceAccount.name to a valid SA
+  enable: true
+
+sources:
+  # --Optionally define some ClusterExternalIPSources that the chart should deploy.
+  # Requires the CRDs to be present or .values.crds.enable to be true
+  cluster: []
+  #  - name: example-source
+  #    annotations: {}
+  #    spec:
+  #      ipv4:
+  #        solvers:
+  #          - ipAPI:
+  #              provider: myIP
+
+# --serviceAccount created for externalip-manager if .values.rbac.enable is true
+serviceAccount:
+  annotations: {}
+  name: ""
+# --clusterRole created for externalip-manager if .values.rbac.enable is true.
+clusterRole:
+  annotations: {}
+  name: ""
+# --clusterRoleBinding created for externalip-manager if .values.rbac.enable is true.
+clusterRoleBinding:
+  annotations: {}
+  name: ""
+
+podAnnotations: {}
+podSecurityContext: {}
+securityContext: {}
+labels:
+
+resources: {}
+nodeSelector: {}
+tolerations: []
+affinity: {}

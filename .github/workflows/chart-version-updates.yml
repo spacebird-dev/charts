@@ -17,6 +17,7 @@ jobs:
           - metallb-dyn6
           - clouddns-nat-helper
           - paperless
+          - externalip-manager
     steps:
       - name: Check out codebase
         uses: actions/checkout@v4

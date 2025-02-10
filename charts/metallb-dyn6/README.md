@@ -18,7 +18,7 @@ Alternatively, you can also add the repository like so:
 
 And then install the chart from the repository reference:
 
-`helm install spacebird/my-metallb-dyn6 metallb-dyn6`
+`helm install spacebird/metallb-dyn6 my-metallb-dyn6`
 
 ### Notes
 

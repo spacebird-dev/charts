@@ -1,0 +1,14 @@
+{{- range .Values.sources.cluster }}
+apiVersion: externalip.spacebird.dev/v1alpha1
+kind: ClusterExternalIPSource
+metadata:
+  name: {{ .name }}
+  {{- with .annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  labels:
+    {{- include "externalip-manager.labels" $ | nindent 4 }}
+spec:
+  {{- .spec | toYaml | nindent 2 }}
+{{ end }}
