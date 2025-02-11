@@ -16,8 +16,6 @@ jobs:
         chart:
           - name: metallb-dyn6
             tag_prefix: "v"
-          - name: clouddns-nat-helper
-            tag_prefix: "v"
           - name: paperless
             tag_prefix: "v"
           - name: externalip-manager

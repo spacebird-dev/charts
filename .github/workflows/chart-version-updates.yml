@@ -15,7 +15,6 @@ jobs:
       matrix:
         chart:
           - metallb-dyn6
-          - clouddns-nat-helper
           - paperless
           - externalip-manager
     steps:
