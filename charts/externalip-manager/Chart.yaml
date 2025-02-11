@@ -4,6 +4,6 @@ description: Automate ExternalIP entries for Kuberentes Services
 home: https://github.com/spacebird-dev/charts
 name: externalip-manager
 sources:
-  - https://github.com/spacebird-dev/externalip-manager
+- https://github.com/spacebird-dev/externalip-manager
 type: application
-version: 0.1.0
+version: 0.1.1
