@@ -1,6 +1,6 @@
 # externalip-manager
 
-![Version: 0.1.0](https://img.shields.io/badge/Version-0.1.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
+![Version: 0.1.1](https://img.shields.io/badge/Version-0.1.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
 
 Automate ExternalIP entries for Kuberentes Services
 
@@ -31,7 +31,6 @@ And then install the chart from the repository reference:
 | affinity | object | `{}` |  |
 | clusterRole | object | `{"annotations":{},"name":""}` | clusterRole created for externalip-manager if .values.rbac.enable is true. |
 | clusterRoleBinding | object | `{"annotations":{},"name":""}` | clusterRoleBinding created for externalip-manager if .values.rbac.enable is true. |
-| crds.enable | bool | `true` | Install the CRDs used by externalip-manager. Disable if you are installing CRDs manually. |
 | fullnameOverride | string | `""` |  |
 | image.pullPolicy | string | `"IfNotPresent"` |  |
 | image.repository | string | `"ghcr.io/spacebird-dev/externalip-manager"` |  |
@@ -48,7 +47,7 @@ And then install the chart from the repository reference:
 | resources | object | `{}` |  |
 | securityContext | object | `{}` |  |
 | serviceAccount | object | `{"annotations":{},"name":""}` | serviceAccount created for externalip-manager if .values.rbac.enable is true |
-| sources.cluster | list | `[]` | Optionally define some ClusterExternalIPSources that the chart should deploy. Requires the CRDs to be present or .values.crds.enable to be true |
+| sources.cluster | list | `[]` | Optionally define some ClusterExternalIPSources that the chart should deploy. |
 | tolerations | list | `[]` |  |
 
 ----------------------------------------------
