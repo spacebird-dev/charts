@@ -4,7 +4,7 @@ dependencies:
 - condition: redis.bundled.enabled
   name: redis
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 20.8.0
+  version: 20.9.0
 - condition: db.mariadb.enabled
   name: mariadb
   repository: oci://registry-1.docker.io/bitnamicharts
