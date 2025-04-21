@@ -8,7 +8,7 @@ dependencies:
 - condition: db.mariadb.enabled
   name: mariadb
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 20.4.2
+  version: 20.4.3
 - condition: tika.bundled.enabled
   name: tika
   repository: https://apache.jfrog.io/artifactory/tika
