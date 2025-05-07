@@ -46,7 +46,7 @@ semver==3.0.4
     # via -r requirements.in
 urllib3==2.4.0
     # via requests
-virtualenv==20.30.0
+virtualenv==20.31.1
     # via pre-commit
 wheel==0.46.1
     # via pip-tools
