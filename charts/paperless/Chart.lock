@@ -1,7 +1,7 @@
 dependencies:
 - name: redis
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 20.13.4
+  version: 21.1.3
 - name: mariadb
   repository: oci://registry-1.docker.io/bitnamicharts
   version: 20.5.5
@@ -14,5 +14,5 @@ dependencies:
 - name: gotenberg
   repository: https://maikumori.github.io/helm-charts
   version: 1.7.0
-digest: sha256:fee0eeac29c706abed95cc3cb35b2ed5fc9d0e571cdc5c935f3a7435a202c115
-generated: "2025-05-14T01:35:54.081454524Z"
+digest: sha256:396597f3ad41245ccdfbd957534105553f8a6b39377ed4223332e7262baae9ed
+generated: "2025-05-16T15:39:19.616087679Z"
