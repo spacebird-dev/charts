@@ -272,6 +272,40 @@ entries:
     version: 0.1.0
   paperless:
   - apiVersion: v2
+    appVersion: 2.17.1
+    created: "2025-07-27T19:53:23.07880581Z"
+    dependencies:
+    - condition: redis.bundled.enabled
+      name: redis
+      repository: oci://registry-1.docker.io/bitnamicharts
+      version: 21.2.13
+    - condition: db.mariadb.enabled
+      name: mariadb
+      repository: oci://registry-1.docker.io/bitnamicharts
+      version: 21.0.3
+    - condition: tika.bundled.enabled
+      name: tika
+      repository: https://apache.jfrog.io/artifactory/tika
+      version: 2.9.0
+    - condition: db.postgres.enabled
+      name: postgresql
+      repository: oci://registry-1.docker.io/bitnamicharts
+      version: 16.7.21
+    - condition: gotenberg.enabled
+      name: gotenberg
+      repository: https://maikumori.github.io/helm-charts
+      version: 1.7.0
+    description: Helm Chart to install paperless-ngx along with Tika and Gotenberg
+    digest: a222c6121585fdedd9e7a5c38a41f596a48028f3e68a2bd601683df7f5fea297
+    home: https://github.com/spacebird-dev/charts
+    name: paperless
+    sources:
+    - https://github.com/paperless-ngx/paperless-ngx
+    type: application
+    urls:
+    - https://github.com/spacebird-dev/charts/releases/download/paperless-0.6.0/paperless-0.6.0.tgz
+    version: 0.6.0
+  - apiVersion: v2
     appVersion: 2.14.6
     created: "2025-01-29T13:51:15.650691161Z"
     dependencies:
@@ -601,4 +635,4 @@ entries:
     urls:
     - https://github.com/spacebird-dev/charts/releases/download/paperless-0.1.3/paperless-0.1.3.tgz
     version: 0.1.3
-generated: "2025-04-23T02:51:32.418335833Z"
+generated: "2025-07-27T19:53:23.078896169Z"
