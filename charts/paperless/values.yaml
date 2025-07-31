@@ -140,13 +140,17 @@ paperless:
 
   extraVolumes: []
   # - name: consumption
-  #   :
+  #   secret:
   #     secretName: mysecret
   #     optional: false
   extraVolumeMounts: []
   # - name: foo
   #   mountPath: "/etc/foo"
   #   readOnly: true
+
+  # -- Additional environment variables to be passed into paperless
+  extraEnv: []
+
   nodeSelector: {}
   tolerations: []
   affinity: {}

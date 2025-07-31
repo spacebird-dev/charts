@@ -74,6 +74,7 @@ And then install the chart from the repository reference:
 | paperless.affinity | object | `{}` |  |
 | paperless.appTitle | string | `"Paperless-ngx"` | Override the default app title shown in the frontend |
 | paperless.extraConfig | object | `{}` | Additional Configuration parameters to pass to paperless. Expects key-value pairs of config options and values. See https://docs.paperless-ngx.com/configuration |
+| paperless.extraEnv | list | `[]` | Additional environment variables to be passed into paperless |
 | paperless.extraVolumeMounts | list | `[]` |  |
 | paperless.extraVolumes | list | `[]` |  |
 | paperless.image.pullPolicy | string | `"IfNotPresent"` |  |
