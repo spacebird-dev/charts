@@ -13,6 +13,11 @@ spec:
     metadata:
       {{- with .Values.paperless.podAnnotations }}
       annotations:
+        checksum/configmap: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+        checksum/secret-admin: {{ include (print $.Template.BasePath "/secret-admin.yaml") . | sha256sum }}
+        checksum/secret-app: {{ include (print $.Template.BasePath "/secret-app.yaml") . | sha256sum }}
+        checksum/secret-key: {{ include (print $.Template.BasePath "/secret-key.yaml") . | sha256sum }}
+        checksum/secret-smtp: {{ include (print $.Template.BasePath "/secret-smtp.yaml") . | sha256sum }}
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
