@@ -131,6 +131,9 @@ spec:
                 secretKeyRef:
                   {{- toYaml .Values.paperless.smtp.password.existingSecret | nindent 18 }}
           {{- end }}
+          {{- with .Values.paperless.extraEnv }}
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
           envFrom:
             - configMapRef:
                 name: {{ include "paperless.fullname" . }}-config

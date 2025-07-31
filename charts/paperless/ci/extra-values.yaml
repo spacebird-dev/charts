@@ -1,0 +1,20 @@
+paperless:
+  url: "https://nonexistent.tld"
+  secretKey:
+    value: s3fkNVYv8BrZfoPH10UWxEViPhCzf4dP
+  admin:
+    enabled: true
+    password:
+      value: kwWTQLSXxF42JEns3wHItXpVfzKPC9Jh
+  extraConfig:
+    SOME_VAR: hello
+  extraVolumes:
+    - name: test
+      secret:
+        secretName: secret-name
+  extraVolumeMounts:
+    - name: test
+      mountPath: /etc/secret
+  extraEnv:
+    - name: some-other-env-var
+      value: world!
