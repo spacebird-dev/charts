@@ -8,6 +8,16 @@
 Please note that this chart is still relatively new and not all features/values have been tested.
 If you encounter any issues/bugs, feel free to file an issue/PR!
 
+## Dependencies
+
+Paperless requires a database and Redis instance to operate.
+By default, this chart provides a `sqlite` DB inside the data volume and a simple Redis instance.
+If you want to use an external DB you can do so by specifying `db.type=mariadb/postgres` and supplying values in `db.external`.
+For redis, set `externalRedis.url` or `externalRedis.existingSecret`.
+
+Note that this chart does not bundle the Bitnami MariaDB/Postgres/Redis subcharts anymore,
+since Bitnami has stopped offering free tagged images.
+
 {{ template "chart.homepageLine" . }}
 
 {{ template "installInfo" . }}

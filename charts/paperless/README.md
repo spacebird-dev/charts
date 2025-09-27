@@ -7,6 +7,16 @@ Helm Chart to install paperless-ngx along with Tika and Gotenberg
 Please note that this chart is still relatively new and not all features/values have been tested.
 If you encounter any issues/bugs, feel free to file an issue/PR!
 
+## Dependencies
+
+Paperless requires a database and Redis instance to operate.
+By default, this chart provides a `sqlite` DB inside the data volume and a simple Redis instance.
+If you want to use an external DB you can do so by specifying `db.type=mariadb/postgres` and supplying values in `db.external`.
+For redis, set `externalRedis.url` or `externalRedis.existingSecret`.
+
+Note that this chart does not bundle the Bitnami MariaDB/Postgres/Redis subcharts anymore,
+since Bitnami has stopped offering free tagged images.
+
 **Homepage:** <https://github.com/spacebird-dev/charts>
 
 ## Installation
@@ -32,7 +42,7 @@ And then install the chart from the repository reference:
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | db.external.database.existingSecret | object | `{}` |  |
-| db.external.database.name | string | `""` | Remote DB databse |
+| db.external.database.name | string | `""` | Remote DB database |
 | db.external.host.existingSecret | object | `{}` |  |
 | db.external.host.name | string | `""` | Remote DB hostname |
 | db.external.password.existingSecret | object | `{}` |  |
@@ -46,12 +56,11 @@ And then install the chart from the repository reference:
 | db.external.sslMode | string | `""` | Remote DB SSL/TLS connection mode. See https://docs.paperless-ngx.com/configuration/#PAPERLESS_DBSSLMODE |
 | db.external.sslRootCert.certificate | string | `""` | Remote DB server TLS certificate |
 | db.external.sslRootCert.existingSecret | object | `{}` |  |
-| db.external.type | string | `""` | If not empty, will skip db installation and use an external database instead. Accepted values are "" (managed install), "mariadb" and "postgresql" |
 | db.external.user.existingSecret | object | `{}` |  |
 | db.external.user.name | string | `""` | Remote DB username |
-| db.mariadb.enabled | bool | `false` | Install a bundled mariadb database instead of SQLite. If enabled, you must not use another bundled/external DB |
-| db.postgres.enabled | bool | `false` | Install a bundled postgresql database instead of SQLite. If enabled, you must not use another bundled/external DB |
-| db.sqlite.enabled | bool | `true` | Use the integrated sqlite database, enabled by default The database is stored in the data PVC If disabled, you must use another bundled/external DB |
+| db.type | string | `"sqlite"` | The type of DB to use (`sqlite/mariadb/postgres`). If you want to use an external MariaDB/Postgres instance, specify its values in `db.external`` |
+| externalRedis.existingSecret | string | `nil` | Load the redis URL from an existing secret instead |
+| externalRedis.url | string | `""` | Use an external redis server through its url starting with redis://. This disables the bundled redis |
 | fullnameOverride | string | `""` |  |
 | gotenberg.bundled.enabled | bool | `true` | Use the bundled gotenberg install. Ignored if `external.endpoint` is set |
 | gotenberg.external.endpoint | string | `""` | Gotenberg URL as expected by paperless, e.g: http://localhost:3000 |
@@ -62,7 +71,6 @@ And then install the chart from the repository reference:
 | ingress.hosts[0].paths[0].path | string | `"/"` |  |
 | ingress.hosts[0].paths[0].pathType | string | `"ImplementationSpecific"` |  |
 | ingress.tls | list | `[]` |  |
-| mariadb | object | `{"auth":{"database":"paperless","password":"paperless","username":"paperless"},"primary":{"service":{"ports":{"mysql":3306}}}}` | Default credentials for the bundled mariadb DB |
 | nameOverride | string | `""` |  |
 | paperless.admin.email.address | string | `"admin@exmaple.com"` | Email of the admin user |
 | paperless.admin.email.existingSecret | object | `{}` |  |
@@ -83,6 +91,7 @@ And then install the chart from the repository reference:
 | paperless.imagePullSecrets | list | `[]` |  |
 | paperless.livenessProbe.httpGet.path | string | `"/"` |  |
 | paperless.livenessProbe.httpGet.port | int | `8000` |  |
+| paperless.livenessProbe.initialDelaySeconds | int | `120` |  |
 | paperless.nodeSelector | object | `{}` |  |
 | paperless.ocr.defaultLanguage | string | `"eng"` | OCR default language. See https://packages.debian.org/search?keywords=tesseract-ocr-&searchon=names&suite=buster |
 | paperless.ocr.extraLanguages | string | `"deu fra"` | OCR extra languages. |
@@ -134,14 +143,28 @@ And then install the chart from the repository reference:
 | paperless.volumes.media.persistence.size | string | `"5Gi"` |  |
 | paperless.volumes.media.persistence.storageClass | string | `""` |  |
 | paperless.volumes.media.persistence.volumeName | string | `""` | - Optionally specify an existing PV to bind to, instead of creating a new one on install |
-| postgresql | object | `{"auth":{"database":"paperless","password":"paperless","username":"paperless"},"primary":{"service":{"ports":{"postgresql":5432}}}}` | Default credentials for the bundled postgres DB |
-| redis.architecture | string | `"standalone"` | Architecture of the managed redis instance. Defaults to single-node master operation. Note that changing this value is untested and may have undesirable results. |
-| redis.auth.enabled | bool | `true` |  |
-| redis.auth.password | string | `"paperless"` | Password for the bundled redis service |
-| redis.bundled.enabled | bool | `true` | Install a managed redis instance. Ignored if an external redis server is defined below |
-| redis.external.existingSecret | string | `nil` |  |
-| redis.external.url | string | `""` | Use an external redis server through its url starting with redis:// |
-| redis.master.persistence.enabled | bool | `false` |  |
+| redis.affinity | object | `{}` |  |
+| redis.enabled | bool | `true` | Install a simple managed redis instance. Ignored if an external redis server is defined below |
+| redis.extraEnv | list | `[]` |  |
+| redis.extraVolumeMounts | list | `[]` |  |
+| redis.extraVolumes | list | `[]` |  |
+| redis.image.pullPolicy | string | `"IfNotPresent"` |  |
+| redis.image.repository | string | `"docker.io/library/redis"` |  |
+| redis.image.tag | string | `"8.2"` |  |
+| redis.imagePullSecrets | list | `[]` |  |
+| redis.nodeSelector | object | `{}` |  |
+| redis.persistence.accessMode | string | `"ReadWriteOnce"` |  |
+| redis.persistence.enabled | bool | `true` |  |
+| redis.persistence.size | string | `"1Gi"` |  |
+| redis.persistence.storageClass | string | `""` |  |
+| redis.persistence.volumeName | string | `""` | - Optionally specify an existing PV to bind to, instead of creating a new one on install |
+| redis.podAnnotations | object | `{}` |  |
+| redis.podLabels | object | `{}` |  |
+| redis.podSecurityContext.fsGroup | int | `1000` |  |
+| redis.port | int | `6379` |  |
+| redis.resources | object | `{}` |  |
+| redis.securityContext | object | `{}` |  |
+| redis.tolerations | list | `[]` |  |
 | service.port | int | `80` |  |
 | service.type | string | `"ClusterIP"` | How to expose paperless to the k8s cluster. If you want to configure external access, use the `ingress` configuration instead. |
 | tika.bundled.enabled | bool | `true` | Use the bundled tika install for document processing. Ignored if `external.endpoint` is set |

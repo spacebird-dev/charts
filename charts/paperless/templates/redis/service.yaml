@@ -1,0 +1,19 @@
+
+{{- if and .Values.redis.enabled (not (or .Values.externalRedis.url .Values.externalRedis.existingSecret)) }}apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "paperless.fullname" . }}-redis
+  labels:
+    {{- include "paperless.labels" . | nindent 4 }}
+    app.kubernetes.io/component: "redis"
+spec:
+  type: ClusterIP
+  ports:
+    - port: {{ .Values.redis.port }}
+      targetPort: 6379
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "paperless.selectorLabels" . | nindent 4 }}
+    app.kubernetes.io/component: "redis"
+{{- end -}}

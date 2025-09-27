@@ -1,5 +1,7 @@
 HELM_DOCS_TAG := "v1.14.2"
-CHART_TESTING_DOCKER_TAG := "v3.11.0"
+CHART_TESTING_DOCKER_TAG := "v3.13.0"
+
+.PHONY: docs lint
 
 all: docs lint
 
@@ -8,16 +10,10 @@ docs:
 	jnorwood/helm-docs:${HELM_DOCS_TAG} \
 	--template-files=/_templates.gotmpl --template-files=README.md.gotmpl
 
-# Workaround:
-# needed because the official chart-testing container does not have Helm 3.16 yet,
-# which has the --skip-schema-validation flag
-chart-testing-ct:
-	docker build -f ../../util/Dockerfile.chart-testing --build-arg CHART_TESTING_DOCKER_TAG=${CHART_TESTING_DOCKER_TAG} -t ghcr.io/spacebird-dev/charts/chart-testing:latest .
-
-# --skip-schema-validation is needed to prevent subchart.enabled/external/: values from failing schema validtion
+# --skip-schema-validation is needed to prevent subchart.enabled/external/: values from failing schema validation
 # workaround: once chart-testing v3.12/16 is released, readd quay.io/helmpack/chart-testing:${CHART_TESTING_DOCKER_TAG}
-lint: chart-testing-ct
+lint:
 	docker run -it --network host --workdir=/data --volume $$(pwd)/../../:/data \
-	ghcr.io/spacebird-dev/charts/chart-testing:latest \
+	quay.io/helmpack/chart-testing:${CHART_TESTING_DOCKER_TAG} \
 	ct lint --config tests/ct.yaml --charts charts/$$(basename $$(pwd)) \
 	--helm-lint-extra-args '--skip-schema-validation'

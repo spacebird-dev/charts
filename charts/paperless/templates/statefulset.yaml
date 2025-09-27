@@ -14,9 +14,13 @@ spec:
       {{- with .Values.paperless.podAnnotations }}
       annotations:
         checksum/configmap: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+        {{- if and .Values.paperless.admin.enabled (or (not .Values.paperless.admin.user.existingSecret) (not .Values.paperless.admin.email.existingSecret) (not .Values.paperless.admin.password.existingSecret)) }}
         checksum/secret-admin: {{ include (print $.Template.BasePath "/secret-admin.yaml") . | sha256sum }}
+        {{- end }}
         checksum/secret-app: {{ include (print $.Template.BasePath "/secret-app.yaml") . | sha256sum }}
+        {{- if not .Values.paperless.secretKey.existingSecret }}
         checksum/secret-key: {{ include (print $.Template.BasePath "/secret-key.yaml") . | sha256sum }}
+        {{- end }}
         checksum/secret-smtp: {{ include (print $.Template.BasePath "/secret-smtp.yaml") . | sha256sum }}
         {{- toYaml . | nindent 8 }}
       {{- end }}
@@ -48,13 +52,13 @@ spec:
                   name: {{ include "paperless.fullname" . }}-key
                   key: PAPERLESS_SECRET_KEY
           {{- end }}
-          {{- if .Values.redis.external.existingSecret }}
+          {{- if .Values.externalRedis.existingSecret }}
             - name: PAPERLESS_REDIS
               valueFrom:
                 secretKeyRef:
-                  {{- toYaml .Values.redis.external.existingSecret | nindent 18 }}
+                  {{- toYaml .Values.externalRedis.existingSecret | nindent 18 }}
           {{- end }}
-          {{- if .Values.db.external.type }}
+          {{- if or (eq .Values.db.type "postgres") (eq .Values.db.type "mariadb") }}
           {{- if .Values.db.external.host.existingSecret }}
             - name: PAPERLESS_DBHOST
               valueFrom:
@@ -168,6 +172,7 @@ spec:
                 - "curl -u $PAPERLESS_ADMIN_USER:$PAPERLESS_ADMIN_PASSWORD http://localhost:8000/api/status/"
             periodSeconds: 30
             timeoutSeconds: 10
+            initialDelaySeconds: 60
           {{- end }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
@@ -219,7 +224,7 @@ spec:
           secret:
             secretName: {{ include "paperless.fullname" . }}-app
             item:
-              - key: root-cert
+              - key: _root-cert
                 path: cert
       {{- end }}
       {{- if .Values.db.external.sslClientCert.existingSecret }}
@@ -234,7 +239,7 @@ spec:
           secret:
             secretName: {{ include "paperless.fullname" . }}-app
             item:
-              - key: client-cert
+              - key: _client-cert
                 path: cert
       {{- end }}
       {{- if .Values.db.external.sslClientKey.existingSecret }}
@@ -249,7 +254,7 @@ spec:
           secret:
             secretName: {{ include "paperless.fullname" . }}-app
             item:
-              - key: client-key
+              - key: _client-key
                 path: key
       {{- end }}
       {{- with .Values.paperless.extraVolumes }}
