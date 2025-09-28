@@ -243,20 +243,18 @@ externalRedis:
   #  key: ""
 
 tika:
-  bundled:
-    # -- Use the bundled tika install for document processing. Ignored if `external.endpoint` is set
-    enabled: true
-  external:
-    # -- External Tika URL as expected by paperless, e.g: http://localhost:9998
-    endpoint: ""
+  # -- Use the bundled tika install for document processing. Ignored if `external.endpoint` is set
+  enabled: true
+externalTika:
+  # -- External Tika URL as expected by paperless, e.g: http://localhost:9998
+  endpoint: ""
 
 gotenberg:
-  bundled:
-    # -- Use the bundled gotenberg install. Ignored if `external.endpoint` is set
-    enabled: true
-  external:
-    # -- Gotenberg URL as expected by paperless, e.g: http://localhost:3000
-    endpoint: ""
+  # -- Use the bundled gotenberg install. Ignored if `external.endpoint` is set
+  enabled: true
+externalGotenberg:
+  # -- Gotenberg URL as expected by paperless, e.g: http://localhost:3000
+  endpoint: ""
 
 db:
   # -- The type of DB to use (`sqlite/mariadb/postgres`). If you want to use an external MariaDB/Postgres instance, specify its values in `db.external``
