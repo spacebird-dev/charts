@@ -8,8 +8,8 @@ paperless:
       value: kwWTQLSXxF42JEns3wHItXpVfzKPC9Jh
 
 db:
+  type: mariadb
   external:
-    type: mariadb
     host:
       name: db
     database:

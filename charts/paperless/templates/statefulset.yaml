@@ -58,7 +58,7 @@ spec:
                 secretKeyRef:
                   {{- toYaml .Values.externalRedis.existingSecret | nindent 18 }}
           {{- end }}
-          {{- if or (eq .Values.db.type "postgres") (eq .Values.db.type "mariadb") }}
+          {{- if .Values.db.type }}
           {{- if .Values.db.external.host.existingSecret }}
             - name: PAPERLESS_DBHOST
               valueFrom:

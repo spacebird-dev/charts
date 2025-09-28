@@ -3,10 +3,8 @@ kind: ConfigMap
 metadata:
   name: {{ include "paperless.fullname" . }}-config
 data:
-  {{- if eq .Values.db.type "postgres" }}
-  PAPERLESS_DBENGINE: "postgresql"
-  {{- else if eq .Values.db.type "mariadb" }}
-  PAPERLESS_DBENGINE: "mariadb"
+  {{- if .Values.db.type }}
+  PAPERLESS_DBENGINE: {{ .Values.db.type }}
   {{- end }}
   USERMAP_UID: {{ .Values.paperless.podSecurityContext.fsGroup | quote }}
   USERMAP_GID: {{ .Values.paperless.podSecurityContext.fsGroup | quote }}

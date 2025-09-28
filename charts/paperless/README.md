@@ -58,7 +58,7 @@ And then install the chart from the repository reference:
 | db.external.sslRootCert.existingSecret | object | `{}` |  |
 | db.external.user.existingSecret | object | `{}` |  |
 | db.external.user.name | string | `""` | Remote DB username |
-| db.type | string | `"sqlite"` | The type of DB to use (`sqlite/mariadb/postgres`). If you want to use an external MariaDB/Postgres instance, specify its values in `db.external`` |
+| db.type | string | `""` | The type of external DB to use (`mariadb/postgresql`). If empty, will use the internal sqlite DB. If you want to use an external MariaDB/Postgres instance, specify its configuration in `db.external`` |
 | externalGotenberg.endpoint | string | `""` | Gotenberg URL as expected by paperless, e.g: http://localhost:3000 |
 | externalRedis.existingSecret | string | `nil` | Load the redis URL from an existing secret instead |
 | externalRedis.url | string | `""` | Use an external redis server through its url starting with redis://. This disables the bundled redis |
@@ -161,7 +161,7 @@ And then install the chart from the repository reference:
 | redis.persistence.volumeName | string | `""` | - Optionally specify an existing PV to bind to, instead of creating a new one on install |
 | redis.podAnnotations | object | `{}` |  |
 | redis.podLabels | object | `{}` |  |
-| redis.podSecurityContext.fsGroup | int | `1000` |  |
+| redis.podSecurityContext.fsGroup | int | `999` |  |
 | redis.port | int | `6379` |  |
 | redis.resources | object | `{}` |  |
 | redis.securityContext | object | `{}` |  |

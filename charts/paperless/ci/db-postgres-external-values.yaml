@@ -8,8 +8,8 @@ paperless:
       value: kwWTQLSXxF42JEns3wHItXpVfzKPC9Jh
 
 db:
+  type: postgresql
   external:
-    type: postgresql
     host:
       name: db
     database:
