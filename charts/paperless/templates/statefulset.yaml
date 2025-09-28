@@ -59,35 +59,35 @@ spec:
                   {{- toYaml .Values.externalRedis.existingSecret | nindent 18 }}
           {{- end }}
           {{- if or (eq .Values.db.type "postgres") (eq .Values.db.type "mariadb") }}
-          {{- if .Values.db.external.host.existingSecret }}
+          {{- if .Values.externalDB.host.existingSecret }}
             - name: PAPERLESS_DBHOST
               valueFrom:
                 secretKeyRef:
-                  {{- toYaml .Values.db.external.host.existingSecret | nindent 18 }}
+                  {{- toYaml .Values.externalDB.host.existingSecret | nindent 18 }}
           {{- end }}
-          {{- if .Values.db.external.port.existingSecret }}
+          {{- if .Values.externalDB.port.existingSecret }}
             - name: PAPERLESS_DBPORT
               valueFrom:
                 secretKeyRef:
-                  {{- toYaml .Values.db.external.port.existingSecret | nindent 18 }}
+                  {{- toYaml .Values.externalDB.port.existingSecret | nindent 18 }}
           {{- end }}
-          {{- if .Values.db.external.database.existingSecret }}
+          {{- if .Values.externalDB.database.existingSecret }}
             - name: PAPERLESS_DBNAME
               valueFrom:
                 secretKeyRef:
-                  {{- toYaml .Values.db.external.database.existingSecret | nindent 18 }}
+                  {{- toYaml .Values.externalDB.database.existingSecret | nindent 18 }}
           {{- end }}
-          {{- if .Values.db.external.user.existingSecret }}
+          {{- if .Values.externalDB.user.existingSecret }}
             - name: PAPERLESS_DBUSER
               valueFrom:
                 secretKeyRef:
-                  {{- toYaml .Values.db.external.user.existingSecret | nindent 18 }}
+                  {{- toYaml .Values.externalDB.user.existingSecret | nindent 18 }}
           {{- end }}
-          {{- if .Values.db.external.password.existingSecret }}
+          {{- if .Values.externalDB.password.existingSecret }}
             - name: PAPERLESS_DBPASS
               valueFrom:
                 secretKeyRef:
-                  {{- toYaml .Values.db.external.password.existingSecret | nindent 18 }}
+                  {{- toYaml .Values.externalDB.password.existingSecret | nindent 18 }}
           {{- end }}
           {{- end }}
           {{- if .Values.paperless.admin.enabled }}
@@ -177,17 +177,17 @@ spec:
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           volumeMounts:
-          {{- if .Values.db.external.sslRootCert.existingSecret }}
+          {{- if .Values.externalDB.sslRootCert.existingSecret }}
             - name: sslRootCert
               mountPath: /etc/ssl/paperless-root-cert/
               readOnly: true
           {{- end }}
-          {{- if .Values.db.external.sslClientCert.existingSecret }}
+          {{- if .Values.externalDB.sslClientCert.existingSecret }}
             - name: sslClientCert
               mountPath: /etc/ssl/paperless-client-cert/
               readOnly: true
           {{- end }}
-          {{- if .Values.db.external.sslClientKey.existingSecret }}
+          {{- if .Values.externalDB.sslClientKey.existingSecret }}
             - name: sslClientKey
               mountPath: /etc/ssl/paperless-client-key/
               readOnly: true
@@ -212,14 +212,14 @@ spec:
             {{- toYaml . | nindent 12 }}
           {{- end }}
       volumes:
-      {{- if .Values.db.external.sslRootCert.existingSecret }}
+      {{- if .Values.externalDB.sslRootCert.existingSecret }}
         - name: sslRootCert
           secret:
-            secretName: {{ .Values.db.external.sslRootCert.existingSecret.name }}
+            secretName: {{ .Values.externalDB.sslRootCert.existingSecret.name }}
             items:
-              - key: {{ .Values.db.external.sslRootCert.existingSecret.key }}
+              - key: {{ .Values.externalDB.sslRootCert.existingSecret.key }}
                 path: cert
-      {{- else if .Values.db.external.sslRootCert.certificate }}
+      {{- else if .Values.externalDB.sslRootCert.certificate }}
         - name: sslRootCert
           secret:
             secretName: {{ include "paperless.fullname" . }}-app
@@ -227,14 +227,14 @@ spec:
               - key: _root-cert
                 path: cert
       {{- end }}
-      {{- if .Values.db.external.sslClientCert.existingSecret }}
+      {{- if .Values.externalDB.sslClientCert.existingSecret }}
         - name: sslClientCert
           secret:
-            secretName: {{ .Values.db.external.sslClientCert.existingSecret.name }}
+            secretName: {{ .Values.externalDB.sslClientCert.existingSecret.name }}
             items:
-              - key: {{ .Values.db.external.sslClientCert.existingSecret.key }}
+              - key: {{ .Values.externalDB.sslClientCert.existingSecret.key }}
                 path: cert
-      {{- else if .Values.db.external.sslClientCert.certificate }}
+      {{- else if .Values.externalDB.sslClientCert.certificate }}
         - name: sslClientCert
           secret:
             secretName: {{ include "paperless.fullname" . }}-app
@@ -242,14 +242,14 @@ spec:
               - key: _client-cert
                 path: cert
       {{- end }}
-      {{- if .Values.db.external.sslClientKey.existingSecret }}
+      {{- if .Values.externalDB.sslClientKey.existingSecret }}
         - name: sslClientKey
           secret:
-            secretName: {{ .Values.db.external.sslClientKey.existingSecret.name }}
+            secretName: {{ .Values.externalDB.sslClientKey.existingSecret.name }}
             items:
-              - key: {{ .Values.db.external.sslClientKey.existingSecret.key }}
+              - key: {{ .Values.externalDB.sslClientKey.existingSecret.key }}
                 path: key
-      {{- else if .Values.db.external.sslClientKey.key }}
+      {{- else if .Values.externalDB.sslClientKey.key }}
         - name: sslClientKey
           secret:
             secretName: {{ include "paperless.fullname" . }}-app

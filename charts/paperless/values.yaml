@@ -261,54 +261,54 @@ gotenberg:
 db:
   # -- The type of DB to use (`sqlite/mariadb/postgres`). If you want to use an external MariaDB/Postgres instance, specify its values in `db.external``
   type: sqlite
-  external:
-    host:
-      # -- Remote DB hostname
-      name: ""
-      existingSecret: {}
-      #  name: ""
-      #  key: ""
-    port:
-      # -- Remote DB port
-      value: 5432
-      existingSecret: {}
-      #  name: ""
-      #  key: ""
-    database:
-      # -- Remote DB database
-      name: ""
-      existingSecret: {}
-      #  name: ""
-      #  key: ""
-    user:
-      # -- Remote DB username
-      name: ""
-      existingSecret: {}
-      #  name: ""
-      #  key: ""
-    password:
-      # -- Remote DB password
-      value: ""
-      existingSecret: {}
-      #  name: ""
-      #  key: ""
-    # -- Remote DB SSL/TLS connection mode. See https://docs.paperless-ngx.com/configuration/#PAPERLESS_DBSSLMODE
-    sslMode: ""
-    sslRootCert:
-      # -- Remote DB server TLS certificate
-      certificate: ""
-      existingSecret: {}
-      #  name: ""
-      #  key: ""
-    sslClientCert:
-      # -- Remote DB client TLS certificate
-      certificate: ""
-      existingSecret: {}
-      #  name: ""
-      #  key: ""
-    sslClientKey:
-      # -- Remote DB client TLS key
-      key: ""
-      existingSecret: {}
-      #  name: ""
-      #  key: ""
+externalDB:
+  host:
+    # -- Remote DB hostname
+    name: ""
+    existingSecret: {}
+    #  name: ""
+    #  key: ""
+  port:
+    # -- Remote DB port
+    value: 5432
+    existingSecret: {}
+    #  name: ""
+    #  key: ""
+  database:
+    # -- Remote DB database
+    name: ""
+    existingSecret: {}
+    #  name: ""
+    #  key: ""
+  user:
+    # -- Remote DB username
+    name: ""
+    existingSecret: {}
+    #  name: ""
+    #  key: ""
+  password:
+    # -- Remote DB password
+    value: ""
+    existingSecret: {}
+    #  name: ""
+    #  key: ""
+  # -- Remote DB SSL/TLS connection mode. See https://docs.paperless-ngx.com/configuration/#PAPERLESS_DBSSLMODE
+  sslMode: ""
+  sslRootCert:
+    # -- Remote DB server TLS certificate
+    certificate: ""
+    existingSecret: {}
+    #  name: ""
+    #  key: ""
+  sslClientCert:
+    # -- Remote DB client TLS certificate
+    certificate: ""
+    existingSecret: {}
+    #  name: ""
+    #  key: ""
+  sslClientKey:
+    # -- Remote DB client TLS key
+    key: ""
+    existingSecret: {}
+    #  name: ""
+    #  key: ""
