@@ -15,4 +15,4 @@ name: paperless
 sources:
 - https://github.com/paperless-ngx/paperless-ngx
 type: application
-version: 1.0.0
+version: 1.0.1
