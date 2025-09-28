@@ -1,7 +1,7 @@
 apiVersion: v2
 appVersion: 2.18.4
 dependencies:
-  - condition: tika.bundled.enabled
+  - condition: tika.enabled
     name: tika
     repository: https://apache.jfrog.io/artifactory/tika
     version: 3.2.2
