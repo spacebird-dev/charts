@@ -272,6 +272,28 @@ entries:
     version: 0.1.0
   paperless:
   - apiVersion: v2
+    appVersion: 2.18.4
+    created: "2025-09-28T17:05:39.333854624Z"
+    dependencies:
+    - condition: tika.enabled
+      name: tika
+      repository: https://apache.jfrog.io/artifactory/tika
+      version: 3.2.2
+    - condition: gotenberg.enabled
+      name: gotenberg
+      repository: https://maikumori.github.io/helm-charts
+      version: 1.12.0
+    description: Helm Chart to install paperless-ngx along with Tika and Gotenberg
+    digest: f58009e3429f32346a47efc1865d008cdf0354240b2e3adb6ccae69a96e07cd7
+    home: https://github.com/spacebird-dev/charts
+    name: paperless
+    sources:
+    - https://github.com/paperless-ngx/paperless-ngx
+    type: application
+    urls:
+    - https://github.com/spacebird-dev/charts/releases/download/paperless-1.0.1/paperless-1.0.1.tgz
+    version: 1.0.1
+  - apiVersion: v2
     appVersion: 2.17.1
     created: "2025-07-31T02:41:48.593736841Z"
     dependencies:
@@ -703,4 +725,4 @@ entries:
     urls:
     - https://github.com/spacebird-dev/charts/releases/download/paperless-0.1.3/paperless-0.1.3.tgz
     version: 0.1.3
-generated: "2025-07-31T02:41:48.593866819Z"
+generated: "2025-09-28T17:05:39.333995808Z"
