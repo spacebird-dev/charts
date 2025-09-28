@@ -1,30 +1,18 @@
 apiVersion: v2
 appVersion: 2.17.1
 dependencies:
-- condition: redis.bundled.enabled
-  name: redis
-  repository: oci://registry-1.docker.io/bitnamicharts
-  version: 21.2.14
-- condition: db.mariadb.enabled
-  name: mariadb
-  repository: oci://registry-1.docker.io/bitnamicharts
-  version: 21.0.8
-- condition: tika.bundled.enabled
-  name: tika
-  repository: https://apache.jfrog.io/artifactory/tika
-  version: 2.9.0
-- condition: db.postgres.enabled
-  name: postgresql
-  repository: oci://registry-1.docker.io/bitnamicharts
-  version: 16.7.27
-- condition: gotenberg.enabled
-  name: gotenberg
-  repository: https://maikumori.github.io/helm-charts
-  version: 1.7.0
+  - condition: tika.bundled.enabled
+    name: tika
+    repository: https://apache.jfrog.io/artifactory/tika
+    version: 2.9.0
+  - condition: gotenberg.enabled
+    name: gotenberg
+    repository: https://maikumori.github.io/helm-charts
+    version: 1.7.0
 description: Helm Chart to install paperless-ngx along with Tika and Gotenberg
 home: https://github.com/spacebird-dev/charts
 name: paperless
 sources:
-- https://github.com/paperless-ngx/paperless-ngx
+  - https://github.com/paperless-ngx/paperless-ngx
 type: application
 version: 0.7.1

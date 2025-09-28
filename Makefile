@@ -1,5 +1,7 @@
 HELM_DOCS_TAG := "v1.14.2"
-CHART_TESTING_DOCKER_TAG := "v3.7.1"
+CHART_TESTING_DOCKER_TAG := "v3.13.0"
+
+.PHONY: docs lint
 
 all: docs lint
 

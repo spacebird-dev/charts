@@ -7,6 +7,5 @@ paperless:
     password:
       value: kwWTQLSXxF42JEns3wHItXpVfzKPC9Jh
 
-redis:
-  external:
-    url: redis://:paperless@redis:6379
+externalRedis:
+  url: redis://:paperless@redis:6379

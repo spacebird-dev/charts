@@ -150,7 +150,6 @@ paperless:
 
   # -- Additional environment variables to be passed into paperless
   extraEnv: []
-
   nodeSelector: {}
   tolerations: []
   affinity: {}
@@ -176,10 +175,10 @@ paperless:
     httpGet:
       path: /
       port: 8000
+    initialDelaySeconds: 120
   readinessProbe:
     # -- Enable a custom Readiness Probe. By default, a readiness Probe to /api/status/ will be enabled if a default admin user is enabled.
-    custom:
-      {}
+    custom: {}
       # httpGet:
       #   path: /api/status/
       #   httpHeaders:
@@ -207,26 +206,41 @@ ingress:
   #      - paperless-ngx.example.com
 
 redis:
-  bundled:
-    # -- Install a managed redis instance.
-    # Ignored if an external redis server is defined below
+  # -- Install a simple managed redis instance. Ignored if an external redis server is defined below
+  enabled: true
+  port: 6379
+  imagePullSecrets: []
+  image:
+    repository: "docker.io/library/redis"
+    pullPolicy: IfNotPresent
+    tag: "8.2"
+  persistence:
     enabled: true
-  # -- Architecture of the managed redis instance. Defaults to single-node master operation.
-  # Note that changing this value is untested and may have undesirable results.
-  architecture: standalone
-  master:
-    persistence:
-      enabled: false
-  auth:
-    enabled: true
-    # -- Password for the bundled redis service
-    password: paperless
-  external:
-    # -- Use an external redis server through its url starting with redis://
-    url: ""
-    existingSecret:
-    #  name: ""
-    #  key: ""
+    # --- Optionally specify an existing PV to bind to, instead of creating a new one on install
+    volumeName: ""
+    storageClass: ""
+    accessMode: ReadWriteOnce
+    size: 1Gi
+  extraVolumes: []
+  extraVolumeMounts: []
+  extraEnv: []
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+  podAnnotations: {}
+  podLabels: {}
+  podSecurityContext:
+    fsGroup: 1000
+  securityContext: {}
+  resources: {}
+
+externalRedis:
+  # -- Use an external redis server through its url starting with redis://. This disables the bundled redis
+  url: ""
+  # -- Load the redis URL from an existing secret instead
+  existingSecret:
+  #  name: ""
+  #  key: ""
 
 tika:
   bundled:
@@ -245,23 +259,9 @@ gotenberg:
     endpoint: ""
 
 db:
-  sqlite:
-    # -- Use the integrated sqlite database, enabled by default
-    # The database is stored in the data PVC
-    # If disabled, you must use another bundled/external DB
-    enabled: true
-  postgres:
-    # -- Install a bundled postgresql database instead of SQLite.
-    # If enabled, you must not use another bundled/external DB
-    enabled: false
-  mariadb:
-    # -- Install a bundled mariadb database instead of SQLite.
-    # If enabled, you must not use another bundled/external DB
-    enabled: false
+  # -- The type of DB to use (`sqlite/mariadb/postgres`). If you want to use an external MariaDB/Postgres instance, specify its values in `db.external``
+  type: sqlite
   external:
-    # -- If not empty, will skip db installation and use an external database instead.
-    # Accepted values are "" (managed install), "mariadb" and "postgresql"
-    type: ""
     host:
       # -- Remote DB hostname
       name: ""
@@ -275,7 +275,7 @@ db:
       #  name: ""
       #  key: ""
     database:
-      # -- Remote DB databse
+      # -- Remote DB database
       name: ""
       existingSecret: {}
       #  name: ""
@@ -312,24 +312,3 @@ db:
       existingSecret: {}
       #  name: ""
       #  key: ""
-
-# -- Default credentials for the bundled postgres DB
-postgresql:
-  auth:
-    username: paperless
-    database: paperless
-    password: paperless
-  primary:
-    service:
-      ports:
-        postgresql: 5432
-# -- Default credentials for the bundled mariadb DB
-mariadb:
-  auth:
-    username: paperless
-    database: paperless
-    password: paperless
-  primary:
-    service:
-      ports:
-        mysql: 3306
