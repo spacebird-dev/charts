@@ -230,7 +230,7 @@ redis:
   podAnnotations: {}
   podLabels: {}
   podSecurityContext:
-    fsGroup: 1000
+    fsGroup: 999
   securityContext: {}
   resources: {}
 
