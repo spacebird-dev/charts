@@ -22,15 +22,15 @@ data:
   PAPERLESS_FORCE_SCRIPT_NAME: {{ .Values.paperless.pathPrefix }}
   PAPERLESS_STATIC_URL: {{ .Values.paperless.pathPrefix }}/static/
 {{- end }}
-{{- if .Values.tika.external.endpoint }}
+{{- if .Values.externalTika.endpoint }}
   PAPERLESS_TIKA_ENABLED: "true"
-  PAPERLESS_TIKA_ENDPOINT: {{ .Values.tika.external.endpoint }}
+  PAPERLESS_TIKA_ENDPOINT: {{ .Values.externalTika.endpoint }}
 {{- else if .Values.tika.enabled }}
   PAPERLESS_TIKA_ENABLED: "true"
   PAPERLESS_TIKA_ENDPOINT: {{ printf "http://%s" (include "tika-helm.fullname" .Subcharts.tika) }}:{{ .Values.tika.service.port }}
 {{- end }}
-{{- if .Values.gotenberg.external.endpoint }}
-  PAPERLESS_TIKA_GOTENBERG_ENDPOINT: {{ .Values.gotenberg.external.endpoint }}
+{{- if .Values.externalGotenberg.endpoint }}
+  PAPERLESS_TIKA_GOTENBERG_ENDPOINT: {{ .Values.externalGotenberg.endpoint }}
 {{- else if .Values.gotenberg.enabled }}
   PAPERLESS_TIKA_GOTENBERG_ENDPOINT: {{ printf "http://%s:%d" (include "gotenberg.fullname" .Subcharts.gotenberg) (int .Values.gotenberg.service.port) }}
 {{- end }}

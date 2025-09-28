@@ -59,11 +59,12 @@ And then install the chart from the repository reference:
 | db.external.user.existingSecret | object | `{}` |  |
 | db.external.user.name | string | `""` | Remote DB username |
 | db.type | string | `"sqlite"` | The type of DB to use (`sqlite/mariadb/postgres`). If you want to use an external MariaDB/Postgres instance, specify its values in `db.external`` |
+| externalGotenberg.endpoint | string | `""` | Gotenberg URL as expected by paperless, e.g: http://localhost:3000 |
 | externalRedis.existingSecret | string | `nil` | Load the redis URL from an existing secret instead |
 | externalRedis.url | string | `""` | Use an external redis server through its url starting with redis://. This disables the bundled redis |
+| externalTika.endpoint | string | `""` | External Tika URL as expected by paperless, e.g: http://localhost:9998 |
 | fullnameOverride | string | `""` |  |
-| gotenberg.bundled.enabled | bool | `true` | Use the bundled gotenberg install. Ignored if `external.endpoint` is set |
-| gotenberg.external.endpoint | string | `""` | Gotenberg URL as expected by paperless, e.g: http://localhost:3000 |
+| gotenberg.enabled | bool | `true` | Use the bundled gotenberg install. Ignored if `external.endpoint` is set |
 | ingress.annotations | object | `{}` |  |
 | ingress.className | string | `""` |  |
 | ingress.enabled | bool | `false` |  |
@@ -167,8 +168,7 @@ And then install the chart from the repository reference:
 | redis.tolerations | list | `[]` |  |
 | service.port | int | `80` |  |
 | service.type | string | `"ClusterIP"` | How to expose paperless to the k8s cluster. If you want to configure external access, use the `ingress` configuration instead. |
-| tika.bundled.enabled | bool | `true` | Use the bundled tika install for document processing. Ignored if `external.endpoint` is set |
-| tika.external.endpoint | string | `""` | External Tika URL as expected by paperless, e.g: http://localhost:9998 |
+| tika.enabled | bool | `true` | Use the bundled tika install for document processing. Ignored if `external.endpoint` is set |
 
 ### Note on `existingSecret`
 
