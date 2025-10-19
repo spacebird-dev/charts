@@ -147,6 +147,19 @@ entries:
     version: 0.2.11
   externalip-manager:
   - apiVersion: v2
+    appVersion: 0.4.0
+    created: "2025-10-19T16:32:44.16774767Z"
+    description: Automate ExternalIP entries for Kuberentes Services
+    digest: 942c4be676acb41e93b5e0f173871fc4a404ed37fb99ca0aa13e46c3e013d1b6
+    home: https://github.com/spacebird-dev/charts
+    name: externalip-manager
+    sources:
+    - https://github.com/spacebird-dev/externalip-manager
+    type: application
+    urls:
+    - https://github.com/spacebird-dev/charts/releases/download/externalip-manager-0.4.0/externalip-manager-0.4.0.tgz
+    version: 0.4.0
+  - apiVersion: v2
     appVersion: 0.3.0
     created: "2025-10-19T01:37:55.486212047Z"
     description: Automate ExternalIP entries for Kuberentes Services
@@ -751,4 +764,4 @@ entries:
     urls:
     - https://github.com/spacebird-dev/charts/releases/download/paperless-0.1.3/paperless-0.1.3.tgz
     version: 0.1.3
-generated: "2025-10-19T01:37:55.48629396Z"
+generated: "2025-10-19T16:32:44.167861493Z"
