@@ -1,0 +1,25 @@
+image:
+  repository: ghcr.io/spacebird-dev/sealed-secrets-metadata-webhook
+  pullPolicy: IfNotPresent
+  tag: ""
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+# --configuration for the mutating webhook
+config:
+  # -- annotations to insert into the template and their values
+  annotations: {}
+  # -- labels to insert into the template and their values
+  labels: {}
+
+podAnnotations: {}
+podSecurityContext: {}
+securityContext: {}
+labels:
+
+resources: {}
+nodeSelector: {}
+tolerations: []
+affinity: {}

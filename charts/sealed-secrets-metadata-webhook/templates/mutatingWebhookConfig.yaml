@@ -1,0 +1,26 @@
+apiVersion: admissionregistration.k8s.io/v1
+kind: MutatingWebhookConfiguration
+metadata:
+  name: {{ include "sealed-secrets-metadata-webhook.fullname" . }}
+  annotations:
+    cert-manager.io/inject-ca-from: {{ .Release.Namespace }}/{{ include "sealed-secrets-metadata-webhook.fullname" . }}
+webhooks:
+  - admissionReviewVersions:
+    - v1
+    name: sealed-secrets-metadata-webhook.spacebird.dev
+    clientConfig:
+      service:
+        name: {{ include "sealed-secrets-metadata-webhook.fullname" . }}
+        namespace: {{ .Release.Namespace }}
+        path: /mutate
+    rules:
+      - apiGroups:
+          - bitnami.com
+        apiVersions:
+          - v1alpha1
+        resources:
+          - sealedsecrets
+        operations:
+          - CREATE
+          - UPDATE
+    sideEffects: None

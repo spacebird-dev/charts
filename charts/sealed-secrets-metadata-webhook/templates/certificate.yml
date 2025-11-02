@@ -1,0 +1,22 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ include "sealed-secrets-metadata-webhook.fullname" . }}
+  namespace: {{ .Release.Namespace | quote }}
+spec:
+  commonName: sealed-secrets-metadata-webhook
+  dnsNames:
+  - {{ include "sealed-secrets-metadata-webhook.fullname" . }}.{{ .Release.Namespace }}.svc
+  - {{ include "sealed-secrets-metadata-webhook.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local
+  issuerRef:
+    kind: Issuer
+    name: {{ include "sealed-secrets-metadata-webhook.fullname" . }}-selfsign
+  secretName: {{ include "sealed-secrets-metadata-webhook.fullname" . }}-tls
+---
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: {{ include "sealed-secrets-metadata-webhook.fullname" . }}-selfsign
+  namespace: {{ .Release.Namespace | quote }}
+spec:
+  selfSigned: {}

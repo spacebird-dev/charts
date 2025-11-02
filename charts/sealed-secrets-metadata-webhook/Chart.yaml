@@ -1,0 +1,9 @@
+apiVersion: v2
+appVersion: 0.1.0
+description: MutatingWebhook to add annotations and labels to SealedSecret templates
+home: https://github.com/spacebird-dev/charts
+name: sealed-secrets-metadata-webhook
+sources:
+  - https://github.com/spacebird-dev/sealed-secrets-metadata-webhook
+type: application
+version: 0.1.0

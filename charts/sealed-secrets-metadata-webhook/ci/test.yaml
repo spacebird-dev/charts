@@ -1,0 +1,7 @@
+config:
+  annotations: {}
+  labels:
+    velero.io/exclude-from-backup: "true"
+image:
+  tag: latest
+  pullPolicy: Always
