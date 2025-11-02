@@ -2,59 +2,61 @@
 name: Update appVersions in Charts
 
 on:
-  workflow_dispatch:
-  schedule:
-    - cron: "0 3 * * *"
+    workflow_dispatch:
+    schedule:
+        - cron: "0 3 * * *"
 
 jobs:
-  update-app-version:
-    name: Check for appVersion update (${{ matrix.chart.name }})
-    runs-on: ubuntu-24.04
-    strategy:
-      fail-fast: false
-      matrix:
-        chart:
-          - name: metallb-dyn6
-            tag_prefix: "v"
-          - name: paperless
-            tag_prefix: "v"
-          - name: externalip-manager
-            tag_prefix: "v"
-    steps:
-      - name: Check out codebase
-        uses: actions/checkout@v5
-        with:
-          fetch-depth: 0
+    update-app-version:
+        name: Check for appVersion update (${{ matrix.chart.name }})
+        runs-on: ubuntu-24.04
+        strategy:
+            fail-fast: false
+            matrix:
+                chart:
+                    - name: metallb-dyn6
+                      tag_prefix: "v"
+                    - name: paperless
+                      tag_prefix: "v"
+                    - name: externalip-manager
+                      tag_prefix: "v"
+                    - name: sealed-secrets-metadata-webhook
+                      tag_prefix: "v"
+        steps:
+            - name: Check out codebase
+              uses: actions/checkout@v5
+              with:
+                  fetch-depth: 0
 
-      - name: Set up Python 3
-        uses: actions/setup-python@v6
-        with:
-          python-version: "3.14"
+            - name: Set up Python 3
+              uses: actions/setup-python@v6
+              with:
+                  python-version: "3.14"
 
-      - name: Install pip dependencies
-        run: pip install -r requirements.txt
+            - name: Install pip dependencies
+              run: pip install -r requirements.txt
 
-      - name: Update appVersion according to release difference
-        run: echo "BUMP_SIZE=$(util/chart-version-updater.py appVersion ${{ matrix.chart.name }} --tag-prefix ${{ matrix.chart.tag_prefix }})" >> $GITHUB_ENV
+            - name: Update appVersion according to release difference
+              run: echo "BUMP_SIZE=$(util/chart-version-updater.py appVersion ${{ matrix.chart.name }} --tag-prefix ${{ matrix.chart.tag_prefix }})" >> $GITHUB_ENV
 
-      - name: Update versions in docs
-        run: cd charts/${{ matrix.chart.name}} && make docs
+            - name: Update versions in docs
+              run: cd charts/${{ matrix.chart.name}} && make docs
 
-      # 2-step process - we update the appVersion first, then open a PR with the bump size as a label
-      # release-drafter can then work out the appropiate chart version from all relevant PRs
-      - name: Open PR to merge potential appVersion change
-        uses: peter-evans/create-pull-request@v7
-        with:
-          base: main
-          add-paths: |
-            charts/${{ matrix.chart.name }}/Chart.yaml
-            charts/${{ matrix.chart.name }}/README.md
-          title: "${{ matrix.chart.name }}: bump AppVersion"
-          body: |
-            The upstream application for the ${{ matrix.chart.name }} chart has been updated.
+            # 2-step process - we update the appVersion first, then open a PR with the bump size as a label
+            # release-drafter can then work out the appropiate chart version from all relevant PRs
+            - name: Open PR to merge potential appVersion change
+              uses: peter-evans/create-pull-request@v7
+              with:
+                  base: main
+                  add-paths: |
+                      charts/${{ matrix.chart.name }}/Chart.yaml
+                      charts/${{ matrix.chart.name }}/README.md
+                  title: "${{ matrix.chart.name }}: bump AppVersion"
+                  body: |
+                      The upstream application for the ${{ matrix.chart.name }} chart has been updated.
 
-            This PR updates the charts appVersion accordingly.
-          commit-message: "${{ matrix.chart.name }}: bump AppVersion"
-          branch: maintenance/${{ matrix.chart.name }}-appVersion-bump
-          labels: pr-${{ env.BUMP_SIZE }}
-          delete-branch: true
+                      This PR updates the charts appVersion accordingly.
+                  commit-message: "${{ matrix.chart.name }}: bump AppVersion"
+                  branch: maintenance/${{ matrix.chart.name }}-appVersion-bump
+                  labels: pr-${{ env.BUMP_SIZE }}
+                  delete-branch: true

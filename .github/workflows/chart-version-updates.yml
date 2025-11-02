@@ -2,65 +2,66 @@
 name: Update Chart versions according to PR labels
 
 on:
-  push:
-    branches:
-      - main
-  workflow_dispatch:
+    push:
+        branches:
+            - main
+    workflow_dispatch:
 
 jobs:
-  version-maintenance:
-    name: Update ${{ matrix.chart }} version according to PR labels
-    runs-on: ubuntu-24.04
-    strategy:
-      matrix:
-        chart:
-          - metallb-dyn6
-          - paperless
-          - externalip-manager
-    steps:
-      - name: Check out codebase
-        uses: actions/checkout@v5
-        with:
-          fetch-depth: 0
+    version-maintenance:
+        name: Update ${{ matrix.chart }} version according to PR labels
+        runs-on: ubuntu-24.04
+        strategy:
+            matrix:
+                chart:
+                    - metallb-dyn6
+                    - paperless
+                    - externalip-manager
+                    - sealed-secrets-metadata-webhook
+        steps:
+            - name: Check out codebase
+              uses: actions/checkout@v5
+              with:
+                  fetch-depth: 0
 
-      - name: Set up Python 3
-        uses: actions/setup-python@v6
-        with:
-          python-version: "3.14"
+            - name: Set up Python 3
+              uses: actions/setup-python@v6
+              with:
+                  python-version: "3.14"
 
-      - name: Install pip dependencies
-        run: pip install -r requirements.txt
+            - name: Install pip dependencies
+              run: pip install -r requirements.txt
 
-      - uses: release-drafter/release-drafter@v6
-        id: drafter
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          config-name: release-drafter/${{ matrix.chart }}.yml
+            - uses: release-drafter/release-drafter@v6
+              id: drafter
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              with:
+                  config-name: release-drafter/${{ matrix.chart }}.yml
 
-      - name: Extract version from release name
-        run: echo "RESOLVED_VERSION=$(echo ${{ steps.drafter.outputs.name }} | sed 's/${{ matrix.chart }}-//')" >> $GITHUB_ENV
+            - name: Extract version from release name
+              run: echo "RESOLVED_VERSION=$(echo ${{ steps.drafter.outputs.name }} | sed 's/${{ matrix.chart }}-//')" >> $GITHUB_ENV
 
-      - name: Set chart version to determined version
-        run: echo "BUMP_SIZE=$(util/chart-version-updater.py version ${{ matrix.chart }} ${{ env.RESOLVED_VERSION }})" >> $GITHUB_ENV
+            - name: Set chart version to determined version
+              run: echo "BUMP_SIZE=$(util/chart-version-updater.py version ${{ matrix.chart }} ${{ env.RESOLVED_VERSION }})" >> $GITHUB_ENV
 
-      - name: Update versions in docs
-        run: cd charts/${{ matrix.chart }} && make docs
+            - name: Update versions in docs
+              run: cd charts/${{ matrix.chart }} && make docs
 
-      - name: Open PR for collection version update
-        uses: peter-evans/create-pull-request@v7
-        with:
-          add-paths: |
-            charts/${{ matrix.chart }}/Chart.yaml
-            charts/${{ matrix.chart }}/README.md
-          title: "${{ matrix.chart }}: Update chart version to ${{ env.RESOLVED_VERSION }}"
-          body: |
-            One or more changes have been merged into the ${{ matrix.chart }} since its last release.
+            - name: Open PR for collection version update
+              uses: peter-evans/create-pull-request@v7
+              with:
+                  add-paths: |
+                      charts/${{ matrix.chart }}/Chart.yaml
+                      charts/${{ matrix.chart }}/README.md
+                  title: "${{ matrix.chart }}: Update chart version to ${{ env.RESOLVED_VERSION }}"
+                  body: |
+                      One or more changes have been merged into the ${{ matrix.chart }} since its last release.
 
-            This PR updates the charts version number in accordance with the PR labels.
+                      This PR updates the charts version number in accordance with the PR labels.
 
-            Merge this PR before publishing a new Release of the chart.
-          commit-message: "${{ matrix.chart }}: Update chart version to ${{ env.RESOLVED_VERSION }}"
-          branch: maintenance/version-bump-${{ matrix.chart }}
-          labels: chore
-          delete-branch: true
+                      Merge this PR before publishing a new Release of the chart.
+                  commit-message: "${{ matrix.chart }}: Update chart version to ${{ env.RESOLVED_VERSION }}"
+                  branch: maintenance/version-bump-${{ matrix.chart }}
+                  labels: chore
+                  delete-branch: true
