@@ -34,31 +34,34 @@ Create chart name and version as used by the chart label.
 {{/*
 Common labels
 */}}
-{{- define "paperless.labels" -}}
+{{- define "paperless.commonLabels" -}}
 helm.sh/chart: {{ include "paperless.chart" . }}
-{{ include "paperless.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end }}
+{{- define "paperless.labels" -}}
+{{ include "paperless.commonLabels" . }}
+{{ include "paperless.selectorLabels" . }}
+{{- end }}
+{{- define "paperless.redis.labels" -}}
+{{ include "paperless.commonLabels" . }}
+{{ include "paperless.redis.selectorLabels" . }}
+{{- end }}
 
 {{/*
 Selector labels
 */}}
-{{- define "paperless.selectorLabels" -}}
+{{- define "paperless.commonSelectorLabels" -}}
 app.kubernetes.io/name: {{ include "paperless.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
-{{- define "paperless.gotenberg.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "paperless.name" . }}-gotenberg
-app.kubernetes.io/instance: {{ .Release.Name }}-gotenberg
+{{- define "paperless.selectorLabels" -}}
+{{ include "paperless.commonSelectorLabels" . }}
+app.kubernetes.io/component: "paperless"
 {{- end }}
-
-{{- define "paperless.tika.endpoint" -}}
-{{- if .Values.tika.external.endpoint -}}
-{{ .Values.tika.external.endpoint }}
-{{- else -}}
-{{ printf "http://%s:%d" (include "tika-helm.fullname" .Subcharts.tika) .Values.tika.service.port }}
+{{- define "paperless.redis.selectorLabels" -}}
+{{ include "paperless.commonSelectorLabels" . }}
+app.kubernetes.io/component: "redis"
 {{- end -}}
-{{- end }}

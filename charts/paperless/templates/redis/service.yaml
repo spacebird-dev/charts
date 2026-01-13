@@ -4,8 +4,7 @@ kind: Service
 metadata:
   name: {{ include "paperless.fullname" . }}-redis
   labels:
-    {{- include "paperless.labels" . | nindent 4 }}
-    app.kubernetes.io/component: "redis"
+    {{- include "paperless.redis.labels" . | nindent 4 }}
 spec:
   type: ClusterIP
   ports:
@@ -14,6 +13,5 @@ spec:
       protocol: TCP
       name: http
   selector:
-    {{- include "paperless.selectorLabels" . | nindent 4 }}
-    app.kubernetes.io/component: "redis"
+    {{- include "paperless.redis.selectorLabels" . | nindent 4 }}
 {{- end -}}

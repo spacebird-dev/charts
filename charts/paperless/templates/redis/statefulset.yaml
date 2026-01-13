@@ -4,14 +4,12 @@ kind: StatefulSet
 metadata:
   name: {{ include "paperless.fullname" . }}-redis
   labels:
-    {{- include "paperless.labels" . | nindent 4 }}
-    app.kubernetes.io/component: "redis"
+    {{- include "paperless.redis.labels" . | nindent 4 }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      {{- include "paperless.selectorLabels" . | nindent 6 }}
-      app.kubernetes.io/component: "redis"
+      {{- include "paperless.redis.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       {{- with .Values.redis.podAnnotations }}
@@ -19,8 +17,7 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "paperless.labels" . | nindent 8 }}
-        app.kubernetes.io/component: "redis"
+        {{- include "paperless.redis.labels" . | nindent 8 }}
         {{- with .Values.redis.podLabels }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
