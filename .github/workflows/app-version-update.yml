@@ -45,7 +45,7 @@ jobs:
             # 2-step process - we update the appVersion first, then open a PR with the bump size as a label
             # release-drafter can then work out the appropiate chart version from all relevant PRs
             - name: Open PR to merge potential appVersion change
-              uses: peter-evans/create-pull-request@v7
+              uses: peter-evans/create-pull-request@v8
               with:
                   base: main
                   add-paths: |
