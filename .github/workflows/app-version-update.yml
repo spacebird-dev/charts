@@ -24,7 +24,7 @@ jobs:
                       tag_prefix: "v"
         steps:
             - name: Check out codebase
-              uses: actions/checkout@v5
+              uses: actions/checkout@v6
               with:
                   fetch-depth: 0
 
