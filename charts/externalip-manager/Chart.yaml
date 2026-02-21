@@ -6,4 +6,4 @@ name: externalip-manager
 sources:
 - https://github.com/spacebird-dev/externalip-manager
 type: application
-version: 0.5.1
+version: 0.5.2
