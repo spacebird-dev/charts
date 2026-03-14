@@ -213,7 +213,7 @@ redis:
   image:
     repository: "docker.io/library/redis"
     pullPolicy: IfNotPresent
-    tag: "8.2"
+    tag: "8.6"
   persistence:
     enabled: true
     # --- Optionally specify an existing PV to bind to, instead of creating a new one on install
