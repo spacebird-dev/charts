@@ -1,4 +1,5 @@
 {{- range .Values.sources.cluster }}
+---
 apiVersion: externalip.spacebird.dev/v1alpha1
 kind: ClusterExternalIPSource
 metadata:
