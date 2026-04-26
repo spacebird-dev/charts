@@ -30,7 +30,7 @@ pip-tools==7.5.3
     # via -r requirements.in
 platformdirs==4.9.6
     # via virtualenv
-pre-commit==4.5.1
+pre-commit==4.6.0
     # via -r requirements.in
 pyproject-hooks==1.2.0
     # via
