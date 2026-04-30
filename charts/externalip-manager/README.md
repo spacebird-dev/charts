@@ -32,6 +32,7 @@ And then install the chart from the repository reference:
 | clusterRole | object | `{"annotations":{},"name":""}` | clusterRole created for externalip-manager if .values.rbac.enable is true. |
 | clusterRoleBinding | object | `{"annotations":{},"name":""}` | clusterRoleBinding created for externalip-manager if .values.rbac.enable is true. |
 | fullnameOverride | string | `""` |  |
+| hostNetworking | bool | `false` | allow the manager to see host network interfaces. Enable this if you want to use the "interfaces" source |
 | image.pullPolicy | string | `"IfNotPresent"` |  |
 | image.repository | string | `"ghcr.io/spacebird-dev/externalip-manager"` |  |
 | image.tag | string | `""` |  |
@@ -46,7 +47,8 @@ And then install the chart from the repository reference:
 | rbac.enable | bool | `true` | Install the (Cluster)Roles and Bindings needed to operate externalip-manager. If you want to manage RBAC manually, disable this and set .serviceAccount.name to a valid SA |
 | resources | object | `{}` |  |
 | securityContext | object | `{}` |  |
-| serviceAccount | object | `{"annotations":{},"name":""}` | serviceAccount created for externalip-manager if .values.rbac.enable is true |
+| serviceAccount.annotations | object | `{}` |  |
+| serviceAccount.name | string | `""` |  |
 | sources.cluster | list | `[]` | Optionally define some ClusterExternalIPSources that the chart should deploy. |
 | tolerations | list | `[]` |  |
 
