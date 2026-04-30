@@ -44,7 +44,7 @@ clusterRoleBinding:
   name: ""
 
 # --allow the manager to see host network interfaces. Enable this if you want to use the "interfaces" source
-hostNetworking: false
+hostNetwork: false
 
 podAnnotations: {}
 podSecurityContext: {}

@@ -37,7 +37,7 @@ spec:
               value: {{ .Values.loglevel | quote }}
             - name: EXTERNALIP_MANAGER_INTERVAL
               value: {{ .Values.manager.interval | quote }}
-      hostNetworking: {{ .Values.hostNetworking }}
+      hostNetwork: {{ .Values.hostNetwork }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
