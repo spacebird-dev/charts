@@ -148,6 +148,19 @@ entries:
   externalip-manager:
   - apiVersion: v2
     appVersion: 0.5.1
+    created: "2026-04-30T20:28:31.123729711Z"
+    description: Automate ExternalIP entries for Kuberentes Services
+    digest: 15dad603fe73ebaf158910bd606303001030300e5e8c30a0e687b42ceae1c98b
+    home: https://github.com/spacebird-dev/charts
+    name: externalip-manager
+    sources:
+    - https://github.com/spacebird-dev/externalip-manager
+    type: application
+    urls:
+    - https://github.com/spacebird-dev/charts/releases/download/externalip-manager-0.6.0/externalip-manager-0.6.0.tgz
+    version: 0.6.0
+  - apiVersion: v2
+    appVersion: 0.5.1
     created: "2026-04-15T21:03:37.13000959Z"
     description: Automate ExternalIP entries for Kuberentes Services
     digest: 444c6974243fd15a19b2dbd34baa7b9f5e329585e81cd23841a1a7f85ad29675
@@ -861,4 +874,4 @@ entries:
     urls:
     - https://github.com/spacebird-dev/charts/releases/download/sealed-secrets-metadata-webhook-0.1.0/sealed-secrets-metadata-webhook-0.1.0.tgz
     version: 0.1.0
-generated: "2026-04-15T21:03:37.130097971Z"
+generated: "2026-04-30T20:28:31.123904508Z"
