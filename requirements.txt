@@ -16,7 +16,7 @@ click==8.4.1
     # via pip-tools
 distlib==0.4.3
     # via virtualenv
-filelock==3.29.3
+filelock==3.29.4
     # via virtualenv
 identify==2.6.19
     # via pre-commit
