@@ -389,6 +389,28 @@ entries:
     version: 0.1.0
   paperless:
   - apiVersion: v2
+    appVersion: 2.20.15
+    created: "2026-07-25T01:37:11.212259229Z"
+    dependencies:
+    - condition: tika.enabled
+      name: tika
+      repository: https://apache.jfrog.io/artifactory/tika
+      version: 3.2.2
+    - condition: gotenberg.enabled
+      name: gotenberg
+      repository: https://maikumori.github.io/helm-charts
+      version: 1.22.0
+    description: Helm Chart to install paperless-ngx along with Tika and Gotenberg
+    digest: fdecd2711325afaa76e22f3c723774879eec00f2b6edabe3f524c1f8e4e5b209
+    home: https://github.com/spacebird-dev/charts
+    name: paperless
+    sources:
+    - https://github.com/paperless-ngx/paperless-ngx
+    type: application
+    urls:
+    - https://github.com/spacebird-dev/charts/releases/download/paperless-1.2.0/paperless-1.2.0.tgz
+    version: 1.2.0
+  - apiVersion: v2
     appVersion: 2.20.3
     created: "2026-01-13T22:07:32.716770885Z"
     dependencies:
@@ -900,4 +922,4 @@ entries:
     urls:
     - https://github.com/spacebird-dev/charts/releases/download/sealed-secrets-metadata-webhook-0.1.0/sealed-secrets-metadata-webhook-0.1.0.tgz
     version: 0.1.0
-generated: "2026-04-30T23:03:34.244076475Z"
+generated: "2026-07-25T01:37:11.212472197Z"
