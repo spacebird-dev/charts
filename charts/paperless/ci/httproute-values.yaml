@@ -1,0 +1,19 @@
+paperless:
+  url: "https://paperless.invalid.tld"
+  secretKey:
+    value: s3fkNVYv8BrZfoPH10UWxEViPhCzf4dP
+  admin:
+    enabled: true
+    password:
+      value: kwWTQLSXxF42JEns3wHItXpVfzKPC9Jh
+
+route:
+  enabled: true
+  annotations:
+    hello: world
+  hostnames:
+    - paperless.invalid.tld
+    - paperless.top.tld
+  parentRefs:
+    - name: gateway-name
+      namespace: gateway-namespace

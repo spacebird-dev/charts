@@ -205,6 +205,12 @@ ingress:
   #    hosts:
   #      - paperless-ngx.example.com
 
+route:
+  enabled: false
+  annotations: {}
+  hostnames: []
+  parentRefs: []
+
 redis:
   # -- Install a simple managed redis instance. Ignored if an external redis server is defined below
   enabled: true
