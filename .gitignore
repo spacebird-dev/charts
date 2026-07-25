@@ -1,5 +1,7 @@
 .vscode
 
+.helm_ls_cache
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

@@ -166,6 +166,10 @@ And then install the chart from the repository reference:
 | redis.resources | object | `{}` |  |
 | redis.securityContext | object | `{}` |  |
 | redis.tolerations | list | `[]` |  |
+| route.annotations | object | `{}` |  |
+| route.enabled | bool | `false` |  |
+| route.hostnames | list | `[]` |  |
+| route.parentRefs | list | `[]` |  |
 | service.port | int | `80` |  |
 | service.type | string | `"ClusterIP"` | How to expose paperless to the k8s cluster. If you want to configure external access, use the `ingress` configuration instead. |
 | tika.enabled | bool | `true` | Use the bundled tika install for document processing. Ignored if `external.endpoint` is set |
