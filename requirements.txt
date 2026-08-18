@@ -28,7 +28,7 @@ packaging==26.3
     # via build
 pip-tools==7.6.1
     # via -r requirements.in
-platformdirs==4.11.2
+platformdirs==4.11.3
     # via virtualenv
 pre-commit==4.6.2
     # via -r requirements.in
