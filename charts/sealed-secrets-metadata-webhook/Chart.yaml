@@ -4,6 +4,6 @@ description: MutatingWebhook to add annotations and labels to SealedSecret templ
 home: https://github.com/spacebird-dev/charts
 name: sealed-secrets-metadata-webhook
 sources:
-  - https://github.com/spacebird-dev/sealed-secrets-metadata-webhook
+- https://github.com/spacebird-dev/sealed-secrets-metadata-webhook
 type: application
-version: 0.1.0
+version: 0.1.1
