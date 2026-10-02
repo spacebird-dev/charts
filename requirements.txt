@@ -22,7 +22,7 @@ identify==2.6.20
     # via pre-commit
 idna==3.20
     # via requests
-nodeenv==1.10.0
+nodeenv==1.11.0
     # via pre-commit
 packaging==26.3
     # via build
