@@ -6,7 +6,7 @@
 #
 build==1.6.1
     # via pip-tools
-certifi==2026.7.22
+certifi==2026.10.18
     # via requests
 cfgv==3.5.0
     # via pre-commit
