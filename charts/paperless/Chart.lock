@@ -4,6 +4,6 @@ dependencies:
   version: 3.2.2
 - name: gotenberg
   repository: https://maikumori.github.io/helm-charts
-  version: 1.30.0
-digest: sha256:58be5075214df8840ce650f6c614bdee87348feda887d0b4c06f57a370dda3d1
-generated: "2026-11-04T05:01:22.204201038Z"
+  version: 1.31.0
+digest: sha256:511dc3be0dc841e75071ea3227d68aff42830d5c85b528cc616e5b4312dc6eab
+generated: "2026-11-23T06:22:48.916807442Z"
